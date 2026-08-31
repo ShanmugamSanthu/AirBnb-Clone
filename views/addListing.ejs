@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Listing Register</title>
+  </head>
+  <body>
+    <h2>Add a new listing</h2>
+    <% if (error) { %>
+        <p><%= error %></p>
+    <% } %>
+    <form action="/listing/new/add" method="post">
+      <input type="text" name="listing[name]" placeholder="Enter Property Title" />
+      <br /><br />
+      <textarea name="listing[description]" type="text">Add description</textarea>
+      <br /><br />
+      <input type="number" name="listing[price]" placeholder="Mention price" />
+      <br /><br />
+      <input
+        type="text"
+        name="[location]"
+        placeholder="Enter destination/location"
+      />
+      <br /><br />
+      <input type="text" name="listing[country]" placeholder="Enter county name" />
+      <br /><br />
+      <input type="url" name="listing[image]" placeholder="Enter image URL/link" />
+      <br /><br />
+      <button>Add Listing</button>
+    </form>
+    <a href="/">Home</a>
+  </body>
+</html>

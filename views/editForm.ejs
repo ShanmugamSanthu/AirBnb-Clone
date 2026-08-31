@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Listing Details</title>
+  </head>
+  <body>
+    <h2>Edit listing Details</h2>
+    <form action="/listing/edit/update?_method=PATCH" method="post">
+      <input
+        type="text"
+        name="listing[Title]"
+        value="<%= listingData.Title%>"
+      />
+      <br /><br />
+      <textarea name="listing[Description]" type="text">
+<%= listingData.Description%></textarea
+      >
+      <br /><br />
+      <input
+        type="number"
+        name="listing[Price]"
+        value="<%= listingData.Price%>"
+      />
+      <br /><br />
+      <input
+        type="text"
+        name="listing[Location]"
+        value="<%= listingData.Location%>"
+      />
+      <br /><br />
+      <input
+        type="text"
+        name="listing[Country]"
+        value="<%= listingData.Country%>"
+      />
+      <br /><br />
+      <input type="url" name="listing[Image]" value="<%= listingData.Image%>" />
+      <br /><br />
+      <input type="hidden" name="listing[ID]" value="<%= listingData._id%>" />
+      <button>Save changes</button>
+    </form>
+    <a href="/">Home</a>
+  </body>
+</html>
