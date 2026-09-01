@@ -58,7 +58,7 @@ app.get("/", async (req, res) => {
 // add new listing to DB
 app.post("/listing/new/add", validation, async (req, res) => {
   try {
-    await list.create(listingData);
+    await list.create(req.body.listing);
     res.redirect("/");
   } catch (err) {
     console.log(err);
@@ -69,16 +69,16 @@ app.post("/listing/new/add", validation, async (req, res) => {
 //edit page render
 app.get("/listings/edit/:id", async (req, res) => {
   const listingid = req.params.id;
-
   const listingData = await list.findById(listingid);
   res.render("editForm", { listingData, error: null });
 });
 
 //save edited listing form
-app.patch("/listing/edit/update", validation, async (req, res) => {
+app.patch("/listing/edit/update/:id", validation, async (req, res) => {
+  const objID = req.params.id;
   try {
-    await list.findByIdAndUpdate(listingData.ID, listingData);
-    res.redirect(`/listings/${listingData.ID}`);
+    await list.findByIdAndUpdate(objID, req.body.listing);
+    res.redirect(`/listings/${objID}`);
   } catch (err) {
     console.log(err);
     res.send("Try again later");

@@ -5,7 +5,7 @@
     <p><%= error.details[0].message %></p>
 <% } %>
 <form
-  action="/listing/edit/update?_method=PATCH"
+  action="/listing/edit/update/<%= listingData._id%>?_method=PATCH"
   method="post"
   class="newListing"
 >
@@ -46,7 +46,6 @@
   <br /><br />
   <input type="url" name="listing[Image]" value="<%= listingData.Image%>" />
   <br /><br />
-  <input type="hidden" name="listing[ID]" value="<%= listingData._id%>" />
   <button type="submit">Save changes</button>
 </form>
 
