@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Listing</title>
-  </head>
-  <body>
+<% layout('base_ejs/boilerplate') -%>
     <h2>Listing Details</h2>
     <h4><%=userData.Title%></h4>
     <p><%=userData.Description%></p>
@@ -13,6 +6,8 @@
     <p>Price: ₹<%=userData.Price.toLocaleString("en-IN")%> for 24 Hours</p>
     <p>Location: <u><%=userData.Location%></u></p>
     <p>Country: <u><%=userData.Country%></u></p>
+    <form action="/listing/delete/<%=userData._id%>?_method=DELETE" method="post">
+      <br><br>
+      <Button>Delete Listing</Button>
+    </form>
     <a href="/">Home</a>
-  </body>
-</html>

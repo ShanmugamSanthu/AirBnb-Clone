@@ -1,24 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
-  </head>
-  <body>
+<% layout('base_ejs/boilerplate') -%>
     <h1>All Listings</h1>
     <ul>
     <%for( let el of userData){%>
-        <a href="/listings/<%= el._id %>" ><li id="ListingTitle"><%= el.Title %></li></a>
+        <a href="/listings/<%= el._id %>" ><li><%= el.Title %></li></a>
         <li><%= el.Description %></li>
         <form action="/listings/edit/<%= el._id %>" method="get">
-          <input type="hidden" value="<%= el._id %>" >
+
           <button>Edit Listing</button>
         </form>
         <hr>
     <%}%>
     </ul>
     <a href="/listings/new">Add a new Listings</a>
-    <script src="/script.js"></script>
- </body>
-</html>
+  
