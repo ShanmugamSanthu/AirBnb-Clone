@@ -1,13 +1,35 @@
 <% layout('base_ejs/boilerplate') -%>
     <h2>Listing Details</h2>
-    <h4><%=userData.Title%></h4>
-    <p><%=userData.Description%></p>
-    <img src=<%=userData.Image%> alt="Listing Image" width=500px height=500px>
-    <p>Price: ₹<%=userData.Price.toLocaleString("en-IN")%> for 24 Hours</p>
-    <p>Location: <u><%=userData.Location%></u></p>
-    <p>Country: <u><%=userData.Country%></u></p>
-    <form action="/listing/delete/<%=userData._id%>?_method=DELETE" method="post">
+    <h4><%=listingData.Title%></h4>
+    <p><%=listingData.Description%></p>
+    <img src=<%=listingData.Image%> alt="Listing Image" width=500px height=500px>
+    <p>Price: ₹<%=listingData.Price.toLocaleString("en-IN")%> for 24 Hours</p>
+    <p>Location: <u><%=listingData.Location%></u></p>
+    <p>Country: <u><%=listingData.Country%></u></p>
+    <br><br>
+            <form action="/listings/edit/<%= listingData._id %>" method="get">
+
+          <button>Edit Listing</button>
+        </form>
+    <form action="/listing/delete/<%=listingData._id%>?_method=DELETE" method="post"> 
       <br><br>
       <Button>Delete Listing</Button>
     </form>
+    <hr>
+      <a href="/listing/review/new/<%=listingData._id%>" >Add a review about this place</a>
+    <br>
+    <%for(const el of reviewData){%>
+      
+      Comment: <%= el.listingComment  %>  
+      <br>
+      Rating: <%= el.listingRating %> Stars
+      <br>
+      Created at:<%=el.createdAt.toLocaleString()   %>
+      <form action="/review/delete/<%= el._id %>/<%=listingData._id%>" method="post">
+        <button>Delete review</button>
+      </form>
+      <br>  
+      <% } %>
     <a href="/">Home</a>
+
+

@@ -4,4 +4,18 @@
 <p><%= error.details[0].message %></p>
 <% } %>
 
+<% if(reviewError){ %>
+<p><%= reviewError %></p>
+<% } %>
+<% if(error1){ %>
+<p><%= error1 %></p>
+<% } %>
+
+<% if(invalidID){ %>
+    <%=invalidID%>
+<% } %>
+
+<% if(idNotFound){ %>
+    <%=idNotFound%>
+<% } %>
 <a href="/">Home</a>

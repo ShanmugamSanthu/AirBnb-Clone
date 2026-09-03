@@ -1,7 +1,7 @@
+import "dotenv/config";
 import mongoose from "mongoose";
-
 const connectDB = async function () {
-  await mongoose.connect("mongodb://127.0.0.1:27017/Wanderlust");
+  await mongoose.connect(process.env.MONGO_URL);
 };
 
 export default connectDB;

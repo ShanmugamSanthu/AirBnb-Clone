@@ -3,11 +3,9 @@
     <ul>
     <%for( let el of userData){%>
         <a href="/listings/<%= el._id %>" ><li><%= el.Title %></li></a>
+        <img src="<%= el.Image %>" alt="Listing Image" width=100px height=100px>
         <li><%= el.Description %></li>
-        <form action="/listings/edit/<%= el._id %>" method="get">
 
-          <button>Edit Listing</button>
-        </form>
         <hr>
     <%}%>
     </ul>

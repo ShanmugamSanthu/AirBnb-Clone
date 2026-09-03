@@ -1,0 +1,28 @@
+<%- layout("base_ejs/boilerplate") %>
+
+<body>
+  <h2>Leave your thoughts about this place</h2>
+  <form action="/listing/review/<%= listingID %>" method="post" class="review">
+    <p id="ratingWarning"></p>
+    <textarea name="listingReview[listingComment]"> Write a review</textarea>
+    <br />
+    <br />
+
+    <input
+      type="number"
+      placeholder="Rate of 1-5"
+      min="1"
+      max="5"
+      name="listingReview[listingRating]"
+    />
+    <br />
+    <br />
+    <input
+      type="hidden"
+      value="<%= listingID %>"
+      name="listingReview[listingID]"
+    />
+    <button>Submit</button>
+  </form>
+  <a href="/">Home</a>
+</body>
