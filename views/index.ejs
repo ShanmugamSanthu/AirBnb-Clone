@@ -2,12 +2,12 @@
     <h1>All Listings</h1>
     <ul>
     <%for( let el of userData){%>
-        <a href="/listings/<%= el._id %>" ><li><%= el.Title %></li></a>
+        <a href="/listing/<%= el._id %>" ><li><%= el.Title %></li></a>
         <img src="<%= el.Image %>" alt="Listing Image" width=100px height=100px>
         <li><%= el.Description %></li>
 
         <hr>
     <%}%>
     </ul>
-    <a href="/listings/new">Add a new Listings</a>
+    <a href="/listing/new">Add a new Listings</a>
   

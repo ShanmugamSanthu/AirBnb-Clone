@@ -7,14 +7,14 @@ const listingsSchema = new defineSchema({
     required: true,
     type: String,
     minlength: 1,
-    maxlength: 25,
+    maxlength: 200,
     trim: true,
   },
   Description: {
     required: true,
     type: String,
     minlength: 1,
-    maxlength: 100,
+    maxlength: 200,
     trim: true,
   },
   Image: {
