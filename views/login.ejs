@@ -1,0 +1,24 @@
+<%layout("base_ejs/boilerplate")-%>
+<p id="warningForm"></p>
+<form action="/user/login" method="post" class="loginForm">
+  Enter email ID:
+  <input
+    type="email"
+    placeholder="Enter email ID"
+    name="user[userEmail]"
+    required
+  />
+  <br /><br />
+  Enter a password:
+  <input
+    type="text"
+    name="user[userPassword]"
+    placeholder="Enter password"
+    minlength="5"
+    required
+  />
+  <br /><br />
+  <button>Login</button>
+</form>
+<br />
+<a href="/user/signuppage">If you dont have a account signup here</a>

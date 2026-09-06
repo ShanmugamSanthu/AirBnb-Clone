@@ -41,6 +41,11 @@ const listingsSchema = new defineSchema({
     maxlength: 15,
     trim: true,
   },
+  publisher: {
+    ref: "user",
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
 });
 
 const list = mongoose.model("listing", listingsSchema);

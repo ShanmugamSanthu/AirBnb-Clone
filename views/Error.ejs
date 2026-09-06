@@ -18,4 +18,9 @@
 <% if(idNotFound){ %>
     <%=idNotFound%>
 <% } %>
+<% if(userError){ %>
+    <%=userError.details[0].message%>
+<% } %>
+
+
 <a href="/">Home</a>

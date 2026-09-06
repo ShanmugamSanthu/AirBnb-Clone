@@ -2,6 +2,62 @@ const listingForm = document.querySelector(".newListing");
 const dataerror = document.querySelector("#error");
 const reviewForm = document.querySelector(".review");
 const reviewWarning = document.querySelector("#ratingWarning");
+const signupForm = document.querySelector(".userForm");
+const userWarning = document.querySelector("#warningForm");
+
+if (signupForm) {
+  signupForm.addEventListener("submit", (e) => {
+    const formdata = new FormData(signupForm);
+    const name = formdata.get("user[userName]");
+    const password = formdata.get("user[userPassword]");
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    let validData = true;
+    const email = formdata.get("user[userEmail]");
+
+    if (!password) {
+      userWarning.textContent = "Please enter a valid password";
+      validData = false;
+    }
+    if (!emailPattern.test(email)) {
+      userWarning.textContent = "Please enter a valid email ID";
+      validData = false;
+    }
+    if (!name?.trim()) {
+      userWarning.textContent = "Please enter a valid user name";
+      validData = false;
+    }
+    if (validData) {
+      userAccountForm.submit();
+    } else {
+      e.preventDefault();
+    }
+  });
+}
+
+if (loginForm) {
+  loginForm.addEventListener("submit", (e) => {
+    const formdata = new FormData(loginForm);
+    const password = formdata.get("user[userPassword]");
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    let validData = true;
+    const email = formdata.get("user[userEmail]");
+
+    if (!password) {
+      userWarning.textContent = "Please enter a valid password";
+      validData = false;
+    }
+    if (!emailPattern.test(email)) {
+      userWarning.textContent = "Please enter a valid email ID";
+      validData = false;
+    }
+
+    if (validData) {
+      userAccountForm.submit();
+    } else {
+      e.preventDefault();
+    }
+  });
+}
 
 if (reviewForm) {
   reviewForm.addEventListener("submit", (e) => {

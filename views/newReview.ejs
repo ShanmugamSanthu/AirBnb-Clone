@@ -2,7 +2,7 @@
 
 <body>
   <h2>Leave your thoughts about this place</h2>
-  <form action="/listing/review/<%= listingID %>" method="post" class="review">
+  <form action="/review/<%= listingID %>/listing" method="post" class="review">
     <p id="ratingWarning"></p>
     <textarea name="listingReview[listingComment]"> Write a review</textarea>
     <br />
