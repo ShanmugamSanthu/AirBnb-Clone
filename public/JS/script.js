@@ -2,7 +2,8 @@ const listingForm = document.querySelector(".newListing");
 const dataerror = document.querySelector("#error");
 const reviewForm = document.querySelector(".review");
 const reviewWarning = document.querySelector("#ratingWarning");
-const signupForm = document.querySelector(".userForm");
+const signupForm = document.querySelector(".signupForm");
+const loginForm = document.querySelector(".loginForm");
 const userWarning = document.querySelector("#warningForm");
 const messageTimer = document.querySelector("#successMessage");
 
