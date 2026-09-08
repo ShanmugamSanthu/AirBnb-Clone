@@ -27,7 +27,7 @@
       Rating: <%= el.listingRating %> Stars
       <br>
       Created at:<%=el.createdAt.toLocaleString()   %>
-      <form action="/review/delete/<%= el._id %>/<%=listingData._id%>" method="post">
+      <form action="/review/delete/<%= el._id %>/<%=listingData._id%>?_method=DELETE" method="post">
         <button>Delete review</button>
       </form>
       <br>  

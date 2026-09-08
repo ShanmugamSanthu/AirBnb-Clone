@@ -6,6 +6,7 @@ import {
   authorizationCheck,
   listingValidation,
 } from "../customMiddlewares.js  ";
+import ExpressError from "../error.js";
 
 const router = express.Router();
 
@@ -19,13 +20,18 @@ router.post(
   "/new/add",
   authorizationCheck,
   listingValidation,
-  async (req, res) => {
+  async (req, res, next) => {
     try {
       await list.create({ ...req.body.listing, publisher: req.session.userID });
+      req.flash("success", "Listing created successfully");
       res.redirect("/");
     } catch (err) {
       console.log(err);
-      res.send("Couldnt add the listing try later");
+      const newErr = new ExpressError(
+        "Couldnt add listing try again later",
+        500,
+      );
+      next(newErr);
     }
   },
 );
@@ -42,30 +48,58 @@ router.patch(
   "/edit/update/:id",
   authorizationCheck,
   listingValidation,
-  async (req, res) => {
-    const objID = req.params.id;
+  async (req, res, next) => {
+    const userID = req.params.id;
     try {
-      await list.findByIdAndUpdate(objID, req.body.listing, {
-        runValidators: true,
-      });
-      res.redirect(`/listing/${objID}`);
+      const result = await list.findById({ _id: userID });
+      if (!result) {
+        res.send("Listing not found unable to update");
+        return;
+      }
+      if (result.publisher.equals(req.session.userID)) {
+        await list.findByIdAndUpdate(userID, req.body.listing, {
+          runValidators: true,
+        });
+        req.flash("success", "Changes Saved");
+        res.redirect(`/listing/${userID}`);
+      } else {
+        res.send("Cant update the listing you are not the publisher");
+      }
     } catch (err) {
       console.log(err);
-      res.send("Try again later");
+      const newErr = new ExpressError(
+        "Couldnt save changes try again later",
+        500,
+      );
+      next(newErr);
     }
   },
 );
 
 //listing delete route
-router.delete("/delete/:id", authorizationCheck, async (req, res) => {
+router.delete("/delete/:id", authorizationCheck, async (req, res, next) => {
   const userID = req.params.id;
   try {
-    await listingReview.deleteMany({ listingID: userID });
-    await list.findByIdAndDelete(userID);
-    res.redirect("/");
+    const result = await list.findById({ _id: userID });
+    if (!result) {
+      res.send("Listing not found unable to delete");
+      return;
+    }
+    if (result.publisher.equals(req.session.userID)) {
+      await listingReview.deleteMany({ listingID: userID });
+      await list.findByIdAndDelete(userID);
+      req.flash("success", "Listing deleted successfully");
+      res.redirect("/");
+    } else {
+      res.send("Cant delete the listing you are not the publisher");
+    }
   } catch (err) {
     console.log(err);
-    res.send("Try again later");
+    const newErr = new ExpressError(
+      "Couldnt delete listing try again later",
+      500,
+    );
+    next(newErr);
   }
 });
 
@@ -75,26 +109,17 @@ const getReviews = async (userID) => {
 };
 
 //get listing by id
-router.get("/:id", authorizationCheck, async (req, res) => {
+router.get("/:id", authorizationCheck, async (req, res, next) => {
   const userID = req.params.id;
   if (!mongoose.isValidObjectId(userID)) {
-    res.status(400).render("Error", {
-      invalidID,
-      error: null,
-      reviewError: null,
-      error1: null,
-    });
+    const newErr = new ExpressError("Listing id provided is incorrect", 400);
+    next(newErr);
     return;
   }
   const listingData = await list.findById(userID).populate("publisher");
   if (!listingData) {
-    res.status(400).render("Error", {
-      idNotFound,
-      invalidID: null,
-      error: null,
-      reviewError: null,
-      error1: null,
-    });
+    const newErr = new ExpressError("Couldnt find the listing", 500);
+    next(newErr);
     return;
   }
   const reviewData = await getReviews(userID);

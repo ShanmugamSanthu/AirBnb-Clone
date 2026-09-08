@@ -24,6 +24,9 @@
     <h1>Welcome to Travel Bingo- Your dream destination at fingertips</h1>
     <hr />
     <hr />
+    <% if (success && success.length > 0) { %>
+  <p id="successMessage"><%= success[0] %></p>
+<% } %>
     <%- body %>
     <script src="/JS/script.js"></script>
   </body>

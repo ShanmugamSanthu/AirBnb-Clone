@@ -1,5 +1,6 @@
 import listingsSchema from "./serverSchema/serverSchema.js";
 import reviewSchema from "./serverSchema/serverSchemaReview.js";
+
 //authorization middleware
 const authorizationCheck = (req, res, next) => {
   if (!req.session.userID) {
@@ -28,4 +29,19 @@ const reviewValidation = (req, res, next) => {
   }
 };
 
-export { authorizationCheck, listingValidation, reviewValidation };
+//error handling middleware
+const errorHandler = (err, req, res, next) => {
+  if (err) {
+    res.render("Error", {
+      message: err.message,
+      statusCode: err.statusCode,
+    });
+  }
+};
+
+export {
+  authorizationCheck,
+  listingValidation,
+  reviewValidation,
+  errorHandler,
+};

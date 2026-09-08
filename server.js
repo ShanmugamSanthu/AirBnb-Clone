@@ -8,6 +8,9 @@ import reviewRoute from "./routes/reviewRoutes.js";
 import session from "express-session";
 import userAccountRoute from "./routes/userAccountRoute.js";
 import { authorizationCheck } from "./customMiddlewares.js";
+import flash from "connect-flash";
+import expressError from "./error.js";
+import { errorHandler } from "./customMiddlewares.js";
 
 //middlewares
 const app = express();
@@ -19,6 +22,8 @@ const sessionOptions = {
   cookie: {
     httpOnly: true,
     sameSite: "lax",
+    maxAge: 1 * 60 * 1000,
+    httpOnly: true,
   },
 };
 
@@ -29,8 +34,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride("_method"));
 app.engine("ejs", engine);
+app.use(flash());
 app.use((req, res, next) => {
   res.locals.userName = req.session.userName;
+  res.locals.success = req.flash("success");
   next();
 });
 
@@ -56,6 +63,7 @@ app.use("/listing", listingRoute);
 app.use("/review", reviewRoute);
 app.use("/user", userAccountRoute);
 
+app.use(errorHandler);
 app.get((req, res) => {
   res.status(404).send("Page not found");
 });

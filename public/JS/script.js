@@ -4,6 +4,13 @@ const reviewForm = document.querySelector(".review");
 const reviewWarning = document.querySelector("#ratingWarning");
 const signupForm = document.querySelector(".userForm");
 const userWarning = document.querySelector("#warningForm");
+const messageTimer = document.querySelector("#successMessage");
+
+if (messageTimer) {
+  setTimeout(() => {
+    messageTimer.remove();
+  }, 5000);
+}
 
 if (signupForm) {
   signupForm.addEventListener("submit", (e) => {

@@ -58,6 +58,10 @@ router.post("/signup", async (req, res) => {
     return;
   } else {
     await userAccount.create(req.body.user);
+    req.flash(
+      "success",
+      "Account created successfully login with same credentials",
+    );
     res.redirect("/user/loginpage");
   }
 });
