@@ -9,8 +9,10 @@ import session from "express-session";
 import userAccountRoute from "./routes/userAccountRoute.js";
 import { authorizationCheck } from "./customMiddlewares.js";
 import flash from "connect-flash";
-import expressError from "./error.js";
 import { errorHandler } from "./customMiddlewares.js";
+import passport from "passport";
+import LocalStrategy from "passport-local";
+import userAccount from "./config_DB/models/userAccountSchema.js";
 
 //middlewares
 const app = express();
@@ -22,11 +24,8 @@ const sessionOptions = {
   cookie: {
     httpOnly: true,
     sameSite: "lax",
-    maxAge: 1 * 60 * 1000,
-    httpOnly: true,
   },
 };
-
 app.use(session(sessionOptions));
 app.set("view engine", "ejs");
 app.use(express.static("public"));
@@ -35,9 +34,15 @@ app.use(express.json());
 app.use(methodOverride("_method"));
 app.engine("ejs", engine);
 app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(userAccount.authenticate()));
+passport.serializeUser(userAccount.serializeUser());
+passport.deserializeUser(userAccount.deserializeUser());
 app.use((req, res, next) => {
-  res.locals.userName = req.session.userName;
+  res.locals.userName = req.user?.username;
   res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
   next();
 });
 

@@ -22,7 +22,7 @@ router.post(
   listingValidation,
   async (req, res, next) => {
     try {
-      await list.create({ ...req.body.listing, publisher: req.session.userID });
+      await list.create({ ...req.body.listing, publisher: req.user._id });
       req.flash("success", "Listing created successfully");
       res.redirect("/");
     } catch (err) {
@@ -56,7 +56,7 @@ router.patch(
         res.send("Listing not found unable to update");
         return;
       }
-      if (result.publisher.equals(req.session.userID)) {
+      if (result.publisher.equals(req.user._id)) {
         await list.findByIdAndUpdate(userID, req.body.listing, {
           runValidators: true,
         });
@@ -85,7 +85,7 @@ router.delete("/delete/:id", authorizationCheck, async (req, res, next) => {
       res.send("Listing not found unable to delete");
       return;
     }
-    if (result.publisher.equals(req.session.userID)) {
+    if (result.publisher.equals(req.user._id)) {
       await listingReview.deleteMany({ listingID: userID });
       await list.findByIdAndDelete(userID);
       req.flash("success", "Listing deleted successfully");

@@ -1,9 +1,11 @@
-import listingsSchema from "./serverSchema/serverSchema.js";
+import listingsSchema from "./serverSchema/serverSchemaListing.js";
 import reviewSchema from "./serverSchema/serverSchemaReview.js";
+import userSchema from "./serverSchema/serverSchemaUser.js";
+import ExpressError from "./error.js";
 
 //authorization middleware
 const authorizationCheck = (req, res, next) => {
-  if (!req.session.userID) {
+  if (!req.isAuthenticated()) {
     res.redirect("/user/loginpage");
   } else {
     next();
@@ -12,21 +14,40 @@ const authorizationCheck = (req, res, next) => {
 
 //validation middleware edit and new listings
 const listingValidation = (req, res, next) => {
-  const { error } = listingsSchema.validate(req.body.listing);
-  if (error) {
-    return res.render("Error", { error }); // separte error page
+  const { error: newErr } = listingsSchema.validate(req.body.listing);
+  if (newErr) {
+    const newErr = new ExpressError(
+      "please fill accordingly to our requirements",
+    );
+    return next(newErr);
   }
   next();
 };
 
 // review validation middleware
 const reviewValidation = (req, res, next) => {
-  const { error1 } = reviewSchema.validate(req.body.listingReview);
-  if (error1) {
-    return res.render("Error", { error1, error: null, reviewError: null });
-  } else {
-    next();
+  console.log(req.body.listingReview);
+  const { error: newErr } = reviewSchema.validate(req.body.listingReview);
+  if (newErr) {
+    const newErr = new ExpressError(
+      "please add the review details accordingly",
+    );
+    return next(newErr);
   }
+  next();
+};
+
+// user validation middleware
+const userValidation = (req, res, next) => {
+  const { error: newErr } = userSchema.validate(req.body);
+  if (newErr) {
+    const newErr = new ExpressError(
+      "please fill account the details accordingly",
+      400,
+    );
+    return next(newErr);
+  }
+  next();
 };
 
 //error handling middleware
@@ -44,4 +65,5 @@ export {
   listingValidation,
   reviewValidation,
   errorHandler,
+  userValidation,
 };

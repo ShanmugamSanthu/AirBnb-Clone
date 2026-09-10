@@ -1,27 +1,13 @@
 import express from "express";
-import userSchema from "../serverSchema/serverSchema.js";
+import { userValidation } from "../customMiddlewares.js";
 import userAccount from "../config_DB/models/userAccountSchema.js";
+import ExpressError from "../error.js";
+import passport from "passport";
 const router = express.Router();
-
-// user validation middleware
-const userValidation = (req, res, next) => {
-  const { error: userError } = userSchema.validate(req.body.user);
-  if (userError) {
-    res.render("Error", {
-      userError,
-      error: null,
-      reviewError: null,
-      error1: null,
-      invalidID: null,
-      idNotFound: null,
-    });
-  } else {
-    next();
-  }
-};
 
 //login page render
 router.get("/loginpage", (req, res) => {
+  const error = req.flash("error");
   res.render("login");
 });
 
@@ -31,53 +17,64 @@ router.get("/signuppage", (req, res) => {
 });
 
 //login form
-router.post("/login", async (req, res) => {
-  const result = await userAccount.findOne({
-    userEmail: req.body.user.userEmail,
-  });
-  if (!result) {
-    res.send("Account doesnt exists create an account");
-    return;
-  } else if (!(result.userPassword === req.body.user.userPassword)) {
-    res.send("Password is incorrect try again");
-    return;
-  } else {
-    req.session.userID = result._id;
-    req.session.userName = result.userName;
+router.post(
+  "/login",
+  userValidation,
+  passport.authenticate("local", {
+    failureRedirect: "/user/loginpage",
+    failureFlash: "Invalid username or password.",
+  }),
+  (req, res) => {
     res.redirect("/");
-  }
-});
+  },
+);
 
 //signup form
-router.post("/signup", async (req, res) => {
-  const result = await userAccount.findOne({
-    userEmail: req.body.user.userEmail,
-  });
+router.post("/signup", userValidation, async (req, res, next) => {
+  const { username, password, userEmail } = req.body;
+  console.log(username, password, userEmail);
+  const data = { username, userEmail };
+  const result = await userAccount.findOne({ userEmail });
   if (result) {
-    res.send("Email id exists login with the same id or signup with new email");
-    return;
-  } else {
-    await userAccount.create(req.body.user);
-    req.flash(
-      "success",
-      "Account created successfully login with same credentials",
+    const newErr = new ExpressError(
+      "Email id exists login with the same id or signup with new email",
+      400,
     );
-    res.redirect("/user/loginpage");
+    return next(newErr);
+  } else {
+    try {
+      await userAccount.register(data, password);
+      req.flash(
+        "success",
+        "Account created successfully login with same credentials",
+      );
+      res.redirect("/user/loginpage");
+    } catch (err) {
+      console.log(err);
+      const newError = new ExpressError(
+        "Username already taken try a different name",
+        400,
+      );
+      next(newError);
+    }
   }
 });
 
 // session destroy account logout
-router.post("/logout", (req, res) => {
-  if (req.session.userID) {
+router.post("/logout", (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      const newErr = new ExpressError("unable to logout", 500);
+      return next(newErr);
+    }
     req.session.destroy((err) => {
       if (err) {
-        res.send("couldnt logout try again later");
-      } else {
-        res.clearCookie("connect.sid", { path: "/" });
-        res.redirect("/user/loginpage");
+        const newErr = new ExpressError("unable to logout", 500);
+        return next(newErr);
       }
     });
-  }
+    res.redirect("/user/loginpage");
+  });
 });
 
 export default router;

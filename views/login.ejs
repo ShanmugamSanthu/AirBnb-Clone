@@ -1,18 +1,25 @@
 <%layout("base_ejs/boilerplate")-%>
 <p id="warningForm"></p>
+<% if (error && error.length > 0) { %>
+  <p><%= error[0] %></p>
+<% } %>
 <form action="/user/login" method="post" class="loginForm">
   Enter email ID:
+  <input type="email" placeholder="Enter email ID" name="userEmail" required />
+  <br /><br />
+  Enter username:
   <input
-    type="email"
-    placeholder="Enter email ID"
-    name="user[userEmail]"
+    type="text"
+    name="username"
+    placeholder="Enter a username"
+    minlength="2"
     required
   />
   <br /><br />
   Enter a password:
   <input
     type="text"
-    name="user[userPassword]"
+    name="password"
     placeholder="Enter password"
     minlength="5"
     required

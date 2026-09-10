@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import passportLocalMongoose from "passport-local-mongoose";
 
 const userAccountSchema = new mongoose.Schema({
   userEmail: {
@@ -8,18 +9,9 @@ const userAccountSchema = new mongoose.Schema({
     lowercase: true,
     match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
   },
-  userPassword: {
-    required: true,
-    minlength: 5,
-    type: String,
-  },
-  userName: {
-    required: true,
-    type: String,
-    trim: true,
-    minlength: 2,
-  },
 });
+
+userAccountSchema.plugin(passportLocalMongoose.default);
 
 const userAccount = mongoose.model("user", userAccountSchema);
 

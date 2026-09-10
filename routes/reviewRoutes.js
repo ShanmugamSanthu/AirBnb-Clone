@@ -13,10 +13,11 @@ router.post(
   authorizationCheck,
   async (req, res, next) => {
     const reviewData = req.body.listingReview;
+    console.log(reviewData);
     try {
       await listingReview.create({
         ...reviewData,
-        author: req.session.userID,
+        author: req.user._id,
       });
       req.flash("success", "Review posted");
       return res.redirect(`/listing/${req.params.id}`);
@@ -46,7 +47,7 @@ router.delete(
         res.send("Review not found unable to delete").status(400);
         return;
       }
-      if (result.author.equals(req.session.userID)) {
+      if (result.author.equals(req.user._id)) {
         await listingReview.findByIdAndDelete(reviewID);
         req.flash("success", "Review deleted successfully");
         res.redirect(`/listing/${listingID}`);

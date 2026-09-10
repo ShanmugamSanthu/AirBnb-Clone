@@ -16,11 +16,11 @@ if (messageTimer) {
 if (signupForm) {
   signupForm.addEventListener("submit", (e) => {
     const formdata = new FormData(signupForm);
-    const name = formdata.get("user[userName]");
-    const password = formdata.get("user[userPassword]");
+    const name = formdata.get("username");
+    const password = formdata.get("password");
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     let validData = true;
-    const email = formdata.get("user[userEmail]");
+    const email = formdata.get("userEmail");
 
     if (!password) {
       userWarning.textContent = "Please enter a valid password";
@@ -35,7 +35,7 @@ if (signupForm) {
       validData = false;
     }
     if (validData) {
-      userAccountForm.submit();
+      signupForm.submit();
     } else {
       e.preventDefault();
     }
@@ -45,22 +45,22 @@ if (signupForm) {
 if (loginForm) {
   loginForm.addEventListener("submit", (e) => {
     const formdata = new FormData(loginForm);
-    const password = formdata.get("user[userPassword]");
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const password = formdata.get("password");
+    const username = formdata.get("username");
+
     let validData = true;
-    const email = formdata.get("user[userEmail]");
 
     if (!password) {
       userWarning.textContent = "Please enter a valid password";
       validData = false;
     }
-    if (!emailPattern.test(email)) {
-      userWarning.textContent = "Please enter a valid email ID";
+    if (!username?.trim()) {
+      userWarning.textContent = "Please enter a valid username";
       validData = false;
     }
 
     if (validData) {
-      userAccountForm.submit();
+      loginForm.submit();
     } else {
       e.preventDefault();
     }
@@ -97,8 +97,7 @@ if (listingForm) {
         !title?.trim() ||
         !description?.trim() ||
         !location?.trim() ||
-        !country?.trim() ||
-        !price?.trim()
+        !country?.trim()
       ) {
         dataerror.textContent = "Please fill all the fields";
         return true;

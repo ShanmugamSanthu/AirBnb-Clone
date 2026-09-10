@@ -1,6 +1,6 @@
 <% layout('base_ejs/boilerplate') -%>
     <h2>Listing Details</h2>
-    <h4>Author: <%= listingData.publisher.userName %></h4>
+    <h4>Author: <%= listingData.publisher.username %></h4>
     <h4><%=listingData.Title%></h4>
     <p><%=listingData.Description%></p>
     <img src=<%=listingData.Image%> alt="Listing Image" width=500px height=500px>
@@ -20,7 +20,7 @@
       <a href="/review/new/<%=listingData._id%>" >Add a review about this place</a>
     <br>
     <%for(const el of reviewData){%>
-      Posted By: <%=el.author.userName%>
+      Posted By: <%=el.author.username%>
       <br>
       Comment: <%= el.listingComment  %>  
       <br>
