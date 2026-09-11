@@ -13,6 +13,7 @@ import { errorHandler } from "./customMiddlewares.js";
 import passport from "passport";
 import LocalStrategy from "passport-local";
 import userAccount from "./config_DB/models/userAccountSchema.js";
+import "dotenv/config";
 
 //middlewares
 const app = express();

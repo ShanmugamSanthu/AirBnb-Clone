@@ -2,11 +2,8 @@
 
 <h2>Add a new listing</h2>
 
-<% if (error) { %>
-    <p><%= error.details[0].message %></p>
-<% } %>
 <p id="error"></p>
-<form action="/listing/new/add" method="post" class="newListing" >
+<form action="/listing/new/add" method="post" class="newListing" enctype="multipart/form-data">
   <input type="text" name="listing[Title]" placeholder="Enter Property Title" / >
   <br /><br />
   <textarea name="listing[Description]" >Add description</textarea>
@@ -20,7 +17,7 @@
   <input type="text" name="listing[Country]" placeholder="Enter country name"  />
 
   <br /><br />
-  <input type="url" name="listing[Image]" placeholder="Enter image URL/link" />
+  <input type="file" name="listing[Image]"  />
   <br /><br />
   <button type="submit">Add Listing</button>
 </form>
