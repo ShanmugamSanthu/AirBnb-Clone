@@ -8,6 +8,7 @@
   action="/listing/edit/update/<%= listingData._id%>?_method=PATCH"
   method="post"
   class="newListing"
+  enctype="multipart/form-data"
 >
   <input
     type="text"
@@ -44,7 +45,7 @@
   />
 
   <br /><br />
-  <input type="url" name="listing[Image]" value="<%= listingData.Image%>" />
+  <input type="file" name="listing[Image]" value="<%= listingData.Image%>" />
   <br /><br />
   <button type="submit">Save changes</button>
 </form>

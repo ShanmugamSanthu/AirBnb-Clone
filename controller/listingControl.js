@@ -17,6 +17,7 @@ export const addListing = async (req, res, next) => {
       ...req.body.listing,
       publisher: req.user._id,
       Image: result.secure_url,
+      ImagePublicID: result.public_id,
     });
     req.flash("success", "Listing created successfully");
     res.redirect("/");

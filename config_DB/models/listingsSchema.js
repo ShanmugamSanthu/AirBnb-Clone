@@ -22,6 +22,9 @@ const listingsSchema = new defineSchema({
     default: "/images/no_image_listings.jpg",
     set: (v) => (v === "" ? "/images/no_image_listings.jpg" : v),
   },
+  ImagePublicID: {
+    type: String,
+  },
   Price: {
     required: true,
     type: Number,
