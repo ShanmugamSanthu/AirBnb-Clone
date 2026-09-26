@@ -15,7 +15,9 @@ import LocalStrategy from "passport-local";
 import userAccount from "./config_DB/models/userAccountSchema.js";
 import "dotenv/config";
 import cors from "cors";
-// import MongoStore from "connect-mongo";
+
+//disable or enable AUTHN for development purpose
+// import MongoStore from "connect-mongo"; 
 
 //middlewares
 const app = express();
@@ -23,9 +25,11 @@ const sessionOptions = {
   secret: process.env.SECRET_KEY,
   resave: false,
   saveUninitialized: false,
+
+  //disable or enable AUTHN for development purpose
   // store: MongoStore.create({
   //   mongoUrl: process.env.MONGO_URL,
-  // }),
+  // }), 
 
   cookie: {
     httpOnly: true,
