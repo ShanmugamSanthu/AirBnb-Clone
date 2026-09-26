@@ -1,5 +1,5 @@
 import express from "express";
-import { authorizationCheck } from "../customMiddlewares.js";
+import { authenticationCheck } from "../customMiddlewares.js";
 import { reviewValidation } from "../customMiddlewares.js";
 import {
   reviewAdd,
@@ -9,12 +9,16 @@ import {
 const router = express.Router();
 
 // add review db
-router.post("/:id/listing", reviewValidation, authorizationCheck, reviewAdd);
+router.post("/:id/listing", reviewValidation, authenticationCheck, reviewAdd);
 
 //listing review page render
-router.get("/new/:id", authorizationCheck, reviewForm);
+router.get("/new/:id", authenticationCheck, reviewForm);
 
 // delete review
-router.delete("/delete/:reviewId/:listingID", authorizationCheck, deleteReview);
+router.delete(
+  "/delete/:reviewId/:listingID",
+  authenticationCheck,
+  deleteReview,
+);
 
 export default router;

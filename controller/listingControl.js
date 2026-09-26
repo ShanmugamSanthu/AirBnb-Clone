@@ -36,21 +36,42 @@ export const editForm = async (req, res) => {
 
 //save edited listing form
 export const saveListingChanges = async (req, res, next) => {
-  const userID = req.params.id;
+  const listingId = req.params.id;
   try {
-    const result = await list.findById({ _id: userID });
-    if (!result) {
+    const mongoResult = await list.findById({ _id: listingId });
+    if (!mongoResult) {
       res.send("Listing not found unable to update");
       return;
     }
-    if (result.publisher.equals(req.user._id)) {
-      await list.findByIdAndUpdate(userID, req.body.listing, {
+
+    if (req.file) {
+      if (!mongoResult.publisher.equals(req.user._id)) {
+        const newErr = new ExpressError(
+          "You are not the publisher cant update the listing details",
+        );
+        return next(newErr);
+      }
+      const result = await cloudinary.uploader.upload(req.file.path);
+      const listingObj = req.body.listing;
+      listingObj.Image = result.secure_url;
+      listingObj.ImagePublicID = result.public_id;
+
+      await list.findByIdAndUpdate(listingId, listingObj, {
         runValidators: true,
       });
       req.flash("success", "Changes Saved");
-      res.redirect(`/listing/${userID}`);
+      res.redirect(`/listing/${listingId}`);
+      await cloudinary.uploader.destroy(mongoResult.ImagePublicID);
     } else {
-      res.send("Cant update the listing you are not the publisher");
+      if (mongoResult.publisher.equals(req.user._id)) {
+        await list.findByIdAndUpdate(listingId, req.body.listing);
+        req.flash("success", "Changes Saved");
+        return res.redirect(`/listing/${listingId}`);
+      }
+      const newErr = new ExpressError(
+        "You are not the publisher cant update the listing details",
+      );
+      next(newErr);
     }
   } catch (err) {
     console.log(err);
@@ -64,23 +85,27 @@ export const saveListingChanges = async (req, res, next) => {
 
 //listing delete route
 export const deleteListing = async (req, res, next) => {
-  const userID = req.params.id;
+  const listingId = req.params.id;
   try {
-    const result = await list.findById({ _id: userID });
+    const result = await list.findById({ _id: listingId });
     if (!result) {
       res.send("Listing not found unable to delete");
       return;
     }
-    if (result.publisher.equals(req.user._id)) {
-      await listingReview.deleteMany({ listingID: userID });
-      await list.findByIdAndDelete(userID);
-      req.flash("success", "Listing deleted successfully");
-      res.redirect("/");
-    } else {
-      res.send("Cant delete the listing you are not the publisher");
+    if (!result.publisher.equals(req.user._id)) {
+      const newErr = new ExpressError(
+        "Cant delete the listing you are not the publisher",
+        500,
+      );
+      return next(newErr);
     }
+    await listingReview.deleteMany({ listingID: listingId });
+    await list.findByIdAndDelete(listingId);
+    req.flash("success", "Listing deleted successfully");
+    res.redirect("/");
+    await cloudinary.uploader.destroy(result.ImagePublicID);
+    return;
   } catch (err) {
-    console.log(err);
     const newErr = new ExpressError(
       "Couldnt delete listing try again later",
       500,

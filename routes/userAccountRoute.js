@@ -1,5 +1,5 @@
 import express from "express";
-import { userValidation } from "../customMiddlewares.js";
+import { userValidation, verifyEmail } from "../customMiddlewares.js";
 import {
   loginForm,
   signUpForm,
@@ -19,6 +19,7 @@ router.get("/signuppage", signUpForm);
 router.post(
   "/login",
   userValidation,
+  verifyEmail,
   passport.authenticate("local", {
     failureRedirect: "/user/loginpage",
     failureFlash: "Invalid username or password.",

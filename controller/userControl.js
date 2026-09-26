@@ -12,12 +12,9 @@ export const signUpForm = (req, res) => {
   res.render("signup");
 };
 
-//login form
-
 //signup form
 export const signUp = async (req, res, next) => {
   const { username, password, userEmail } = req.body;
-  console.log(username, password, userEmail);
   const data = { username, userEmail };
   const result = await userAccount.findOne({ userEmail });
   if (result) {

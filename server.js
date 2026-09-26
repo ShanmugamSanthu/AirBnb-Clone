@@ -7,13 +7,14 @@ import listingRoute from "./routes/listingRoutes.js";
 import reviewRoute from "./routes/reviewRoutes.js";
 import session from "express-session";
 import userAccountRoute from "./routes/userAccountRoute.js";
-import { authorizationCheck } from "./customMiddlewares.js";
+import { authenticationCheck } from "./customMiddlewares.js";
 import flash from "connect-flash";
 import { errorHandler } from "./customMiddlewares.js";
 import passport from "passport";
 import LocalStrategy from "passport-local";
 import userAccount from "./config_DB/models/userAccountSchema.js";
 import "dotenv/config";
+// import MongoStore from "connect-mongo";
 
 //middlewares
 const app = express();
@@ -21,6 +22,9 @@ const sessionOptions = {
   secret: "secretKey",
   resave: false,
   saveUninitialized: false,
+  // store: MongoStore.create({
+  //   mongoUrl: process.env.MONGO_URL,
+  // }),
 
   cookie: {
     httpOnly: true,
@@ -60,7 +64,7 @@ connectDB()
   });
 
 //get listings
-app.get("/", authorizationCheck, async (req, res) => {
+app.get("/", authenticationCheck, async (req, res) => {
   const userData = await list.find({});
   res.render("index", { userData });
 });

@@ -2,9 +2,10 @@ import listingsSchema from "./serverSchema/serverSchemaListing.js";
 import reviewSchema from "./serverSchema/serverSchemaReview.js";
 import userSchema from "./serverSchema/serverSchemaUser.js";
 import ExpressError from "./error.js";
+import userAccount from "./config_DB/models/userAccountSchema.js";
 
-//authorization middleware
-const authorizationCheck = (req, res, next) => {
+//authentication middleware
+const authenticationCheck = (req, res, next) => {
   if (!req.isAuthenticated()) {
     res.redirect("/user/loginpage");
   } else {
@@ -50,6 +51,21 @@ const userValidation = (req, res, next) => {
   next();
 };
 
+//email login Check middleware
+const verifyEmail = async (req, res, next) => {
+  const { username, userEmail } = req.body;
+  const result = await userAccount.findOne({ username: username });
+  if (!result) {
+    const newErr = new ExpressError("Account doesnt exist");
+    return next(newErr);
+  }
+  if (!(result.userEmail.toLowerCase() === userEmail.toLowerCase())) {
+    const newErr = new ExpressError("Invalid email credentials");
+    return next(newErr);
+  }
+  next();
+};
+
 //error handling middleware
 const errorHandler = (err, req, res, next) => {
   if (err) {
@@ -61,7 +77,8 @@ const errorHandler = (err, req, res, next) => {
 };
 
 export {
-  authorizationCheck,
+  verifyEmail,
+  authenticationCheck,
   listingValidation,
   reviewValidation,
   errorHandler,

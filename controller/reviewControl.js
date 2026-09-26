@@ -3,7 +3,6 @@ import ExpressError from "../error.js";
 // add review db
 export const reviewAdd = async (req, res, next) => {
   const reviewData = req.body.listingReview;
-  console.log(reviewData);
   try {
     await listingReview.create({
       ...reviewData,
@@ -31,16 +30,20 @@ export const deleteReview = async (req, res, next) => {
   try {
     const result = await listingReview.findById({ _id: reviewID });
     if (!result) {
-      res.send("Review not found unable to delete").status(400);
+      res.status(400).send("Review not found unable to delete");
       return;
     }
-    if (result.author.equals(req.user._id)) {
-      await listingReview.findByIdAndDelete(reviewID);
-      req.flash("success", "Review deleted successfully");
-      res.redirect(`/listing/${listingID}`);
-    } else {
-      res.send("Cannot delete review you are not the author");
+    if (!result.author.equals(req.user._id)) {
+      const newErr = new ExpressError(
+        "Cant delete the review your are not the publisher",
+        500,
+      );
+      return next(newErr);
     }
+
+    await listingReview.findByIdAndDelete(reviewID);
+    req.flash("success", "Review deleted successfully");
+    res.redirect(`/listing/${listingID}`);
   } catch (deleteReviewError) {
     console.log(deleteReviewError);
     const newErr = new ExpressError("Couldnt delete the review", 500);

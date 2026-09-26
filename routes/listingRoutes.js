@@ -3,7 +3,7 @@ import multer from "multer";
 const upload = multer({ dest: "uploads/" });
 
 import {
-  authorizationCheck,
+  authenticationCheck,
   listingValidation,
 } from "../customMiddlewares.js  ";
 import {
@@ -18,32 +18,33 @@ import {
 const router = express.Router();
 
 // render listing form
-router.get("/new", authorizationCheck, listingForm);
+router.get("/new", authenticationCheck, listingForm);
 
 // add new listing to DB
 router.post(
   "/new/add",
-  authorizationCheck,
+  authenticationCheck,
   upload.single("listing[Image]"),
   listingValidation,
   addListing,
 );
 
 //edit page render
-router.get("/edit/:id", authorizationCheck, editForm);
+router.get("/edit/:id", authenticationCheck, editForm);
 
 //save edited listing form
 router.patch(
   "/edit/update/:id",
-  authorizationCheck,
+  authenticationCheck,
+  upload.single("listing[Image]"),
   listingValidation,
   saveListingChanges,
 );
 
 //listing delete route
-router.delete("/delete/:id", authorizationCheck, deleteListing);
+router.delete("/delete/:id", authenticationCheck, deleteListing);
 
 //get listing by id
-router.get("/:id", authorizationCheck, ListingByID);
+router.get("/:id", authenticationCheck, ListingByID);
 
 export default router;
