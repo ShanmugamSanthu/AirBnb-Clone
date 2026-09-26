@@ -87,6 +87,7 @@ if (listingForm) {
       const description = formdata.get("listing[Description]");
       const country = formdata.get("listing[Country]");
       const location = formdata.get("listing[Location]");
+      const price = formdata.get("listing[Price]");
 
       if (!Number.isFinite(price) || price < 1) {
         dataerror.textContent = "Please enter a valid price";

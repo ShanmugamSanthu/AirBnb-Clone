@@ -64,7 +64,9 @@ export const saveListingChanges = async (req, res, next) => {
       await cloudinary.uploader.destroy(mongoResult.ImagePublicID);
     } else {
       if (mongoResult.publisher.equals(req.user._id)) {
-        await list.findByIdAndUpdate(listingId, req.body.listing);
+        await list.findByIdAndUpdate(listingId, req.body.listing, {
+          runValidators: true,
+        });
         req.flash("success", "Changes Saved");
         return res.redirect(`/listing/${listingId}`);
       }

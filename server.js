@@ -20,7 +20,7 @@ import cors from "cors";
 //middlewares
 const app = express();
 const sessionOptions = {
-  secret: "secretKey",
+  secret: process.env.SECRET_KEY,
   resave: false,
   saveUninitialized: false,
   // store: MongoStore.create({
