@@ -14,6 +14,7 @@ import passport from "passport";
 import LocalStrategy from "passport-local";
 import userAccount from "./config_DB/models/userAccountSchema.js";
 import "dotenv/config";
+import cors from "cors";
 // import MongoStore from "connect-mongo";
 
 //middlewares
@@ -50,6 +51,7 @@ app.use((req, res, next) => {
   res.locals.error = req.flash("error");
   next();
 });
+app.use(cors());
 
 //connect DB and server
 connectDB()
@@ -67,6 +69,10 @@ connectDB()
 app.get("/", authenticationCheck, async (req, res) => {
   const userData = await list.find({});
   res.render("index", { userData });
+});
+app.get("/vue/listing", async (req, res) => {
+  const userData = await list.find({});
+  res.json(userData);
 });
 
 app.use("/listing", listingRoute);
