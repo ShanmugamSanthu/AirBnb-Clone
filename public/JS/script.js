@@ -89,7 +89,7 @@ if (listingForm) {
       const location = formdata.get("listing[Location]");
       const price = formdata.get("listing[Price]");
 
-      if (!Number.isFinite(price) || price < 1) {
+      if (!Number.isFinite(Number(price)) || Number(price) < 1) {
         dataerror.textContent = "Please enter a valid price";
         return true;
       }
@@ -107,8 +107,6 @@ if (listingForm) {
     }
     if (validation(formdata)) {
       e.preventDefault();
-    } else {
-      listingForm.submit();
     }
   });
 }

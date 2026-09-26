@@ -3,6 +3,7 @@ import list from "../config_DB/models/listingsSchema.js";
 import mongoose from "mongoose";
 import listingReview from "../config_DB/models/listingReviewSchema.js";
 import cloudinary from "../config_DB/cloudinary.js";
+import { unlink } from "node:fs/promises";
 
 // render listing form
 export const listingForm = (req, res) => {
@@ -24,6 +25,14 @@ export const addListing = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     next(err);
+  } finally {
+    try {
+      if (req.file?.path) {
+        await unlink(req.file.path);
+      }
+    } catch (err) {
+      console.log(err); // dev production error so no user interference
+    }
   }
 };
 
@@ -82,6 +91,14 @@ export const saveListingChanges = async (req, res, next) => {
       500,
     );
     next(newErr);
+  } finally {
+    try {
+      if (req.file?.path) {
+        await unlink(req.file.path);
+      }
+    } catch (err) {
+      console.log(err); // dev production error so no user interference
+    }
   }
 };
 
