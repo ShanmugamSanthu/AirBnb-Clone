@@ -18,3 +18,4 @@ onMounted(async () => {
     {{ item.Description }}
   </div>
 </template>
+git reset --hard origin/main
