@@ -40,7 +40,7 @@ export const addListing = async (req, res, next) => {
 export const editForm = async (req, res) => {
   const listingid = req.params.id;
   const listingData = await list.findById(listingid);
-  res.render("editForm", { listingData, error: null });
+  res.json({ listingData });
 };
 
 //save edited listing form
@@ -153,5 +153,5 @@ export const ListingByID = async (req, res, next) => {
     return;
   }
   const reviewData = await getReviews(userID);
-  res.render("displayid", { listingData, reviewData });
+  res.json({ listingData, reviewData });
 };

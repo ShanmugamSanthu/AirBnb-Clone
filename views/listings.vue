@@ -4,18 +4,25 @@ import { ref, onMounted } from "vue";
 const listing = ref([]);
 
 onMounted(async () => {
-  const response = await fetch("http://localhost:8080/vue/listing");
+  const response = await fetch("/vue");
   const data = await response.json();
 
   listing.value = data;
+  // console.log(listing.value.userData);
 });
 </script>
 
 <template>
-  <div v-for="item in listing" :key="item._id">
-    {{ item.Title }} <br />
-    <img :src="item.Image" height="100px" width="100px" /><br />
-    {{ item.Description }}
+  <div>
+    <RouterLink to="/listing/new">New Listing</RouterLink>
+  </div>
+  <div v-for="item in listing.userData" :key="item._id">
+    <div>
+      <RouterLink :to="`/listing/${item._id}`">{{ item.Title }}</RouterLink>
+      <br />
+      <img :src="item.Image" /><br />
+      {{ item.Description }}
+    </div>
+    <hr />
   </div>
 </template>
-git reset --hard origin/main

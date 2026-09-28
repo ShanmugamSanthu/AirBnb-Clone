@@ -17,7 +17,7 @@ import "dotenv/config";
 import cors from "cors";
 
 //disable or enable AUTHN for development purpose
-// import MongoStore from "connect-mongo"; 
+import MongoStore from "connect-mongo";
 
 //middlewares
 const app = express();
@@ -26,10 +26,10 @@ const sessionOptions = {
   resave: false,
   saveUninitialized: false,
 
-  //disable or enable AUTHN for development purpose
-  // store: MongoStore.create({
-  //   mongoUrl: process.env.MONGO_URL,
-  // }), 
+  // disable or enable AUTHN for development purpose
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGO_URL,
+  }),
 
   cookie: {
     httpOnly: true,
@@ -72,12 +72,12 @@ connectDB()
 //get listings
 app.get("/", authenticationCheck, async (req, res) => {
   const userData = await list.find({});
-  res.render("index", { userData });
+  res.json({ userData });
 });
-app.get("/vue/listing", async (req, res) => {
-  const userData = await list.find({});
-  res.json(userData);
-});
+// app.get("/vue/listing", async (req, res) => {
+//   const userData = await list.find({});
+//   res.json(userData);
+// });
 
 app.use("/listing", listingRoute);
 app.use("/review", reviewRoute);
