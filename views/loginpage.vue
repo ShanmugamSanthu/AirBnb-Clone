@@ -1,40 +1,46 @@
 <script setup></script>
 
 <template>
-  <form action="/vue/user/login" method="post">
-    <label for="userEmail">Email:</label>
-    <input
-      type="email"
-      id="userEmail"
-      name="userEmail"
-      placeholder="Enter email"
-      required
-    />
+  <h1>Login</h1>
+  <div>
+    <form action="/vue/user/login" method="post">
+      <label for="userEmail">Email:</label>
+      <input
+        type="email"
+        id="userEmail"
+        name="userEmail"
+        placeholder="Enter email"
+        required
+      />
 
-    <br /><br />
+      <br /><br />
 
-    <label for="username">Username:</label>
-    <input
-      type="text"
-      id="username"
-      name="username"
-      placeholder="Enter username"
-      required
-    />
+      <label for="username">Username:</label>
+      <input
+        type="text"
+        id="username"
+        name="username"
+        placeholder="Enter username"
+        required
+      />
 
-    <br /><br />
+      <br /><br />
 
-    <label for="password">Password:</label>
-    <input
-      type="password"
-      id="password"
-      name="password"
-      placeholder="Enter password"
-      required
-    />
+      <label for="password">Password:</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Enter password"
+        required
+      />
 
-    <br /><br />
+      <br /><br />
 
-    <button type="submit">Login</button>
-  </form>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+  <router-link to="/user/signuppage"
+    >If you dont have a account signup here</router-link
+  >
 </template>

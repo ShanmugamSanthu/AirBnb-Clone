@@ -5,6 +5,8 @@ import listingById from "./views/displayById.vue";
 import editPageRender from "./views/editPage.vue";
 import createForm from "./views/createForm.vue";
 import reviewForm from "./views/reviewForm.vue";
+import signup from "./views/signup.vue";
+import about from "./views/about.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -32,6 +34,14 @@ const router = createRouter({
     {
       path: "/review/new/:id",
       component: reviewForm,
+    },
+    {
+      path: "/user/signuppage",
+      component: signup,
+    },
+    {
+      path: "/aboutpage",
+      component: about,
     },
   ],
 });

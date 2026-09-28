@@ -1,4 +1,8 @@
-<script setup></script>
+<script setup>
+import sharedPage from "./views/shared_layout/sharedPage.vue";
+</script>
 <template>
-  <RouterView />
+  <sharedPage>
+    <RouterView />
+  </sharedPage>
 </template>
