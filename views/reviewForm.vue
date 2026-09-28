@@ -1,8 +1,10 @@
 <script setup>
-// import StarRating from "vue-star-rating";
-// import { ref } from "vue";
+import StarRatingModule from "vue-star-rating";
+import { ref } from "vue";
 import { useRoute } from "vue-router";
 const urlID = useRoute();
+const StarRating = StarRatingModule.default;
+const rating = ref(0);
 </script>
 <template>
   <h2>Leave your thoughts about this place</h2>
@@ -16,13 +18,9 @@ const urlID = useRoute();
     <br />
     <br />
 
-    <input
-      type="number"
-      placeholder="Rate of 1-5"
-      min="1"
-      max="5"
-      name="listingReview[listingRating]"
-    />
+    <StarRating v-model:rating="rating" :increment="0.5" :show-rating="false" />
+
+    <input type="hidden" name="listingReview[listingRating]" :value="rating" />
     <br />
     <br />
     <input
@@ -32,5 +30,4 @@ const urlID = useRoute();
     />
     <button>Submit</button>
   </form>
-  <a href="/">Home</a>
 </template>
