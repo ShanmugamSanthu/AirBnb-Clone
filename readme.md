@@ -14,7 +14,7 @@ Node.js
 Express.js
 MongoDB
 Mongoose
-Passport.js
+Passport
 Passport Local Mongoose
 Express Session
 Connect-Mongo
