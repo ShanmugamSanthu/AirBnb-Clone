@@ -7,7 +7,7 @@ import { unlink } from "node:fs/promises";
 
 // render listing form
 export const listingForm = (req, res) => {
-  res.render("addListing");
+  res.json("addListing");
 };
 
 // add new listing to DB
@@ -20,11 +20,11 @@ export const addListing = async (req, res, next) => {
       Image: result.secure_url,
       ImagePublicID: result.public_id,
     });
-    req.flash("success", "Listing created successfully");
     res.redirect("/");
   } catch (err) {
     console.log(err);
-    next(err);
+    const newErr = new ExpressError("", 500);
+    next(newErr);
   } finally {
     try {
       if (req.file?.path) {
@@ -37,10 +37,16 @@ export const addListing = async (req, res, next) => {
 };
 
 //edit page render
-export const editForm = async (req, res) => {
-  const listingid = req.params.id;
-  const listingData = await list.findById(listingid);
-  res.json({ listingData });
+export const editForm = async (req, res, next) => {
+  try {
+    const listingid = req.params.id;
+    const listingData = await list.findById(listingid);
+    res.json({ listingData });
+  } catch (err) {
+    console.log(err);
+    const newErr = new ExpressError("", 500);
+    next(newErr);
+  }
 };
 
 //save edited listing form
@@ -49,16 +55,18 @@ export const saveListingChanges = async (req, res, next) => {
   try {
     const mongoResult = await list.findById({ _id: listingId });
     if (!mongoResult) {
-      res.send("Listing not found unable to update");
+      console.log("Listing not found unable to update");
+      res.redirect("/");
       return;
     }
 
     if (req.file) {
       if (!mongoResult.publisher.equals(req.user._id)) {
-        const newErr = new ExpressError(
+        console.log(
           "You are not the publisher cant update the listing details",
         );
-        return next(newErr);
+        res.redirect("/");
+        return;
       }
       const result = await cloudinary.uploader.upload(req.file.path);
       const listingObj = req.body.listing;
@@ -68,7 +76,7 @@ export const saveListingChanges = async (req, res, next) => {
       await list.findByIdAndUpdate(listingId, listingObj, {
         runValidators: true,
       });
-      req.flash("success", "Changes Saved");
+
       res.redirect(`/listing/${listingId}`);
       await cloudinary.uploader.destroy(mongoResult.ImagePublicID);
     } else {
@@ -76,20 +84,16 @@ export const saveListingChanges = async (req, res, next) => {
         await list.findByIdAndUpdate(listingId, req.body.listing, {
           runValidators: true,
         });
-        req.flash("success", "Changes Saved");
+
         return res.redirect(`/listing/${listingId}`);
       }
-      const newErr = new ExpressError(
-        "You are not the publisher cant update the listing details",
-      );
-      next(newErr);
+      console.log("You are not the publisher cant update the listing details");
+      res.redirect("/");
+      return;
     }
   } catch (err) {
     console.log(err);
-    const newErr = new ExpressError(
-      "Couldnt save changes try again later",
-      500,
-    );
+    const newErr = new ExpressError("", 500);
     next(newErr);
   } finally {
     try {
@@ -108,50 +112,56 @@ export const deleteListing = async (req, res, next) => {
   try {
     const result = await list.findById({ _id: listingId });
     if (!result) {
-      res.send("Listing not found unable to delete");
+      res.redirect("/");
       return;
     }
     if (!result.publisher.equals(req.user._id)) {
-      const newErr = new ExpressError(
-        "Cant delete the listing you are not the publisher",
-        500,
-      );
-      return next(newErr);
+      res.redirect("/");
+      return;
     }
+
     await listingReview.deleteMany({ listingID: listingId });
     await list.findByIdAndDelete(listingId);
-    req.flash("success", "Listing deleted successfully");
+
     res.redirect("/");
     await cloudinary.uploader.destroy(result.ImagePublicID);
     return;
   } catch (err) {
-    const newErr = new ExpressError(
-      "Couldnt delete listing try again later",
-      500,
-    );
+    console.log(err);
+    const newErr = new ExpressError("", 500);
     next(newErr);
   }
 };
 
 //review from db to client
 const getReviews = async (userID) => {
-  return await listingReview.find({ listingID: userID }).populate("author");
+  try {
+    return await listingReview.find({ listingID: userID }).populate("author");
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
 };
 
 //get listing by id
 export const ListingByID = async (req, res, next) => {
   const userID = req.params.id;
   if (!mongoose.isValidObjectId(userID)) {
-    const newErr = new ExpressError("Listing id provided is incorrect", 400);
-    next(newErr);
+    res.redirect("/");
     return;
   }
-  const listingData = await list.findById(userID).populate("publisher");
-  if (!listingData) {
-    const newErr = new ExpressError("Couldnt find the listing", 500);
+  try {
+    const listingData = await list.findById(userID).populate("publisher");
+    if (!listingData) {
+      res.redirect("/");
+      return;
+    }
+
+    const reviewData = await getReviews(userID);
+    res.json({ listingData, reviewData });
+  } catch (err) {
+    console.log(err);
+    const newErr = new ExpressError("", 500);
     next(newErr);
-    return;
   }
-  const reviewData = await getReviews(userID);
-  res.json({ listingData, reviewData });
 };

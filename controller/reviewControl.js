@@ -9,11 +9,10 @@ export const reviewAdd = async (req, res, next) => {
       ...reviewData,
       author: req.user._id,
     });
-    req.flash("success", "Review posted");
     return res.redirect(`/listing/${req.params.id}`);
   } catch (reviewError) {
     console.log(reviewError);
-    const newErr = new ExpressError("Review couldnt be posted", 500);
+    const newErr = new ExpressError("", 500);
     next(newErr);
   }
 };
@@ -21,7 +20,7 @@ export const reviewAdd = async (req, res, next) => {
 //listing review page render
 export const reviewForm = (req, res) => {
   let listingID = req.params.id;
-  res.render("newReview", { listingID });
+  res.json({ listingID });
 };
 
 // delete review
@@ -31,23 +30,22 @@ export const deleteReview = async (req, res, next) => {
   try {
     const result = await listingReview.findById({ _id: reviewID });
     if (!result) {
-      res.status(400).send("Review not found unable to delete");
+      res.redirect("/");
+
       return;
     }
     if (!result.author.equals(req.user._id)) {
-      const newErr = new ExpressError(
-        "Cant delete the review your are not the publisher",
-        500,
-      );
-      return next(newErr);
+      res.redirect("/");
+
+      return;
     }
 
     await listingReview.findByIdAndDelete(reviewID);
-    req.flash("success", "Review deleted successfully");
+
     res.redirect(`/listing/${listingID}`);
   } catch (deleteReviewError) {
     console.log(deleteReviewError);
-    const newErr = new ExpressError("Couldnt delete the review", 500);
+    const newErr = new ExpressError("", 500);
     next(newErr);
   }
 };

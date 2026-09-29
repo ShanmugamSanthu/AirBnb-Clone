@@ -17,7 +17,7 @@ import "dotenv/config";
 import cors from "cors";
 
 //disable or enable AUTHN for development purpose
-import MongoStore from "connect-mongo";
+// import MongoStore from "connect-mongo";
 
 //middlewares
 const app = express();
@@ -27,9 +27,9 @@ const sessionOptions = {
   saveUninitialized: false,
 
   // disable or enable AUTHN for development purpose
-  store: MongoStore.create({
-    mongoUrl: process.env.MONGO_URL,
-  }),
+  // store: MongoStore.create({
+  //   mongoUrl: process.env.MONGO_URL,
+  // }),
 
   cookie: {
     httpOnly: true,

@@ -10,7 +10,6 @@
         id="userEmail"
         name="userEmail"
         placeholder="Enter email"
-        required
       />
 
       <br /><br />
@@ -21,7 +20,6 @@
         id="username"
         name="username"
         placeholder="Enter username"
-        required
       />
 
       <br /><br />
@@ -32,7 +30,6 @@
         id="password"
         name="password"
         placeholder="Enter password"
-        required
       />
 
       <br /><br />

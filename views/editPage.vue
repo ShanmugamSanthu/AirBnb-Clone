@@ -35,7 +35,6 @@ onMounted(async () => {
         id="title"
         v-model="listingInfo.Title"
         name="listing[Title]"
-        required
       />
       <br />
       <label for="desc">Description</label>
@@ -43,7 +42,6 @@ onMounted(async () => {
         name="listing[Description]"
         id="desc"
         v-model="listingInfo.Description"
-        required
       ></textarea>
       <br />
       <label for="price">Price</label>
@@ -52,8 +50,6 @@ onMounted(async () => {
         id="price"
         v-model="listingInfo.Price"
         name="listing[Price]"
-        required
-        min="1"
       />
       <br />
       <label for="location">Location</label>
@@ -62,7 +58,6 @@ onMounted(async () => {
         id="location"
         v-model="listingInfo.Location"
         name="listing[Location]"
-        required
       />
       <br />
       <label for="country">Country</label>
@@ -71,7 +66,6 @@ onMounted(async () => {
         id="country"
         v-model="listingInfo.Country"
         name="listing[Country]"
-        required
       />
       <br />
       <label for="img">Upload a image</label>

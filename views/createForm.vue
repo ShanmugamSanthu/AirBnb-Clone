@@ -15,11 +15,10 @@
       name="listing[Title]"
       placeholder="Enter Property Title"
       id="title"
-      required
     />
     <br /><br />
     <label for="Description">Description </label>
-    <textarea name="listing[Description]" id="Description" required>
+    <textarea name="listing[Description]" id="Description">
 Add description</textarea
     >
     <br /><br />
@@ -29,8 +28,6 @@ Add description</textarea
       name="listing[Price]"
       placeholder="Mention price"
       id="Price"
-      required
-      min="1"
     />
 
     <br /><br />
@@ -40,7 +37,6 @@ Add description</textarea
       name="listing[Location]"
       placeholder="Enter destination/location"
       id="Location"
-      required
     />
 
     <br /><br />
@@ -50,7 +46,6 @@ Add description</textarea
       name="listing[Country]"
       placeholder="Enter country name"
       id="Country"
-      required
     />
 
     <br /><br />

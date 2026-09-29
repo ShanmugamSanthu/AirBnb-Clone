@@ -17,9 +17,8 @@ const authenticationCheck = (req, res, next) => {
 const listingValidation = (req, res, next) => {
   const { error: newErr } = listingsSchema.validate(req.body.listing);
   if (newErr) {
-    const newErr = new ExpressError(
-      "please fill accordingly to our requirements",
-    );
+    console.log("please fill accordingly to our requirements");
+    const newErr = new ExpressError("", 400);
     return next(newErr);
   }
   next();
@@ -30,9 +29,8 @@ const reviewValidation = (req, res, next) => {
   console.log(req.body.listingReview);
   const { error: newErr } = reviewSchema.validate(req.body.listingReview);
   if (newErr) {
-    const newErr = new ExpressError(
-      "please add the review details accordingly",
-    );
+    console.log("please add the review details accordingly");
+    const newErr = new ExpressError("", 400);
     return next(newErr);
   }
   next();
@@ -42,10 +40,8 @@ const reviewValidation = (req, res, next) => {
 const userValidation = (req, res, next) => {
   const { error: newErr } = userSchema.validate(req.body);
   if (newErr) {
-    const newErr = new ExpressError(
-      "please fill account the details accordingly",
-      400,
-    );
+    console.log("please fill account the details accordingly");
+    const newErr = new ExpressError("", 400);
     return next(newErr);
   }
   next();
@@ -56,11 +52,12 @@ const verifyEmail = async (req, res, next) => {
   const { username, userEmail } = req.body;
   const result = await userAccount.findOne({ username: username });
   if (!result) {
-    const newErr = new ExpressError("Account doesnt exist");
+    const newErr = new ExpressError("Account doesnt exist", 400);
     return next(newErr);
   }
   if (!(result.userEmail.toLowerCase() === userEmail.toLowerCase())) {
-    const newErr = new ExpressError("Invalid email credentials");
+    console.log("Invalid email credentials");
+    const newErr = new ExpressError("", 400);
     return next(newErr);
   }
   next();
@@ -69,10 +66,23 @@ const verifyEmail = async (req, res, next) => {
 //error handling middleware
 const errorHandler = (err, req, res, next) => {
   if (err) {
-    res.render("Error", {
-      message: err.message,
-      statusCode: err.statusCode,
-    });
+    if (err.statusCode === 400) {
+      res.status(400).json("Bad request");
+      return;
+    }
+    if (err.statusCode === 500) {
+      console.log(err);
+      res.status(500).json("Something is wrong");
+      return;
+    }
+    if (err.statusCode === 200) {
+      res.status(200).json("Account exists login with same credentials");
+      return;
+    }
+    if (err.statusCode === 409) {
+      res.status(409).json("Username already taken try a different name");
+      return;
+    }
   }
 };
 
