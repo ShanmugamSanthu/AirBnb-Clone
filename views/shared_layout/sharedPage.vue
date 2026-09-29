@@ -20,11 +20,13 @@ onMounted(async () => {
 
   <h3>
     <div class="navbar">
-      <router-link to="/">Home</router-link>
+      <router-link to="/" v-if="userNameInfo">Home</router-link>
       <router-link to="/aboutpage">About us</router-link>
-      <form action="/vue/user/logout" method="post">
-        <button>Logout</button>
-      </form>
+      <div v-if="userNameInfo">
+        <form action="/vue/user/logout" method="post">
+          <button>Logout</button>
+        </form>
+      </div>
     </div>
   </h3>
   <slot />
