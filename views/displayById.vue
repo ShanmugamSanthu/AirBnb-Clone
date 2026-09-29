@@ -1,15 +1,18 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { authNCheck } from "../utils/authCheck";
 
 const listingInfo = ref({});
 const reviewInfo = ref([]);
 const loading = ref(true);
 const urlID = useRoute();
+const router = useRouter();
 
 // console.log(urlID.params.id);
 onMounted(async () => {
-  const response = await fetch(`/vue/listing/${urlID.params.id}`);
+  const response = await authNCheck(`/vue/listing/${urlID.params.id}`, router);
+  if (!response) return;
   const data = await response.json();
   listingInfo.value = data.listingData;
   reviewInfo.value = data.reviewData;

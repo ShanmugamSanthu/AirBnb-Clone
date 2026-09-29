@@ -29,6 +29,13 @@ router.post(
   },
 );
 
+//name render
+router.get("/current-user", (req, res) => {
+  res.json({
+    userName: req.user?.username || null,
+  });
+});
+
 //signup form
 router.post("/signup", userValidation, signUp);
 

@@ -1,10 +1,18 @@
 <script setup>
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { authNCheck } from "../utils/authCheck";
 
 const listing = ref([]);
+const router = useRouter();
 
 onMounted(async () => {
-  const response = await fetch("/vue");
+  const response = await authNCheck("/vue", router);
+  if (!response) return;
+  // if (response.url.includes("/user/loginpage")) {
+  //   router.push("/user/loginpage");
+  //   return;
+  // }
   const data = await response.json();
 
   listing.value = data;
