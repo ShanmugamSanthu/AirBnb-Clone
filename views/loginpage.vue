@@ -1,9 +1,14 @@
-<script setup></script>
+<script setup>
+const loginForm = (event) => {
+  const formData = new FormData(event.target);
+  console.log(formData);
+};
+</script>
 
 <template>
   <h1>Login</h1>
   <div>
-    <form action="/vue/user/login" method="post">
+    <form @submit.prevent="loginForm" method="post">
       <label for="userEmail">Email:</label>
       <input
         type="email"

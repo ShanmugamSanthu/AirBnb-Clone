@@ -26,7 +26,6 @@ const listingValidation = (req, res, next) => {
 
 // review validation middleware
 const reviewValidation = (req, res, next) => {
-  console.log(req.body.listingReview);
   const { error: newErr } = reviewSchema.validate(req.body.listingReview);
   if (newErr) {
     console.log("please add the review details accordingly");
