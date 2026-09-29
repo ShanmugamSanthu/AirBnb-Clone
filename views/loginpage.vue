@@ -1,14 +1,22 @@
 <script setup>
-const loginForm = (event) => {
-  const formData = new FormData(event.target);
-  console.log(formData);
-};
+// const loginForm = async (event) => {
+//   const formData = new FormData(event.target);
+//   console.log(Object.fromEntries(formData));
+
+//   try {
+//     const response = await fetch("/vue/user/login", {
+//       method: "POST",
+//       "content-type": "application/x-www-form-urlencoded",
+//       body: URLSearchParams(formData),
+//     });
+//   } catch (error) {}
+// };
 </script>
 
 <template>
   <h1>Login</h1>
   <div>
-    <form @submit.prevent="loginForm" method="post">
+    <form action="/vue/user/login" method="post">
       <label for="userEmail">Email:</label>
       <input
         type="email"

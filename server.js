@@ -1,14 +1,12 @@
 import express from "express";
 import methodOverride from "method-override";
 import connectDB from "./config_DB/DBconnection.js";
-import engine from "ejs-mate";
 import list from "./config_DB/models/listingsSchema.js";
 import listingRoute from "./routes/listingRoutes.js";
 import reviewRoute from "./routes/reviewRoutes.js";
 import session from "express-session";
 import userAccountRoute from "./routes/userAccountRoute.js";
 import { authenticationCheck } from "./customMiddlewares.js";
-import flash from "connect-flash";
 import { errorHandler } from "./customMiddlewares.js";
 import passport from "passport";
 import LocalStrategy from "passport-local";
@@ -37,23 +35,15 @@ const sessionOptions = {
   },
 };
 app.use(session(sessionOptions));
-app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride("_method"));
-app.engine("ejs", engine);
-app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(userAccount.authenticate()));
 passport.serializeUser(userAccount.serializeUser());
 passport.deserializeUser(userAccount.deserializeUser());
-app.use((req, res, next) => {
-  res.locals.success = req.flash("success");
-  res.locals.error = req.flash("error");
-  next();
-});
 app.use(cors());
 
 //connect DB and server
