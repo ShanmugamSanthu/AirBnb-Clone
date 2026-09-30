@@ -1,5 +1,7 @@
 <script setup></script>
 <template>
+  <div><h1>Travel Bingo-Your Dream Destination at your finger tips</h1></div>
+  <hr />
   <div>
     <h3>
       Travel Bingo is a web application created for discovering new destinations
@@ -15,4 +17,5 @@
       Bingo is built for anyone looking to discover their next destination.
     </h3>
   </div>
+  <router-link to="/">Home</router-link>
 </template>

@@ -42,7 +42,7 @@ export const deleteReview = async (req, res, next) => {
 
     await listingReview.findByIdAndDelete(reviewID);
 
-    res.redirect(`/listing/${listingID}`);
+    res.status(200).json("Review deleted successfully");
   } catch (deleteReviewError) {
     console.log(deleteReviewError);
     const newErr = new ExpressError("", 500);

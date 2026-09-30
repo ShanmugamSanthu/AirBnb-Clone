@@ -138,7 +138,7 @@ export const deleteListing = async (req, res, next) => {
     await listingReview.deleteMany({ listingID: listingId });
     await list.findByIdAndDelete(listingId);
 
-    res.redirect("/");
+    res.status(200).json("Listing deleted successfully");
     if (result.ImagePublicID) {
       await cloudinary.uploader.destroy(result.ImagePublicID).catch((err) => {
         console.log(err);

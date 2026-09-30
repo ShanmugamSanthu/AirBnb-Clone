@@ -7,6 +7,7 @@ import {
   logout,
 } from "../controller/userControl.js";
 import passport from "passport";
+
 const router = express.Router();
 
 //login page render
@@ -21,9 +22,19 @@ router.post(
   userValidation,
   verifyEmail,
   passport.authenticate("local", {
-    failureRedirect: "/user/loginpage",
-    failureFlash: "Invalid username or password.",
+    failWithError: true,
   }),
+  (err, req, res, next) => {
+    if (err) {
+      if (err.statusCode === 400 || err.statusCode === 403) {
+        return next(err);
+      }
+
+      return res.status(401).json("Invalid username or password");
+    }
+
+    next();
+  },
   (req, res) => {
     res.redirect("/");
   },

@@ -2,6 +2,8 @@
 import StarRatingModule from "vue-star-rating";
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { reviewCheck } from "../ClientSchema/uxValidation.js";
+
 const urlID = useRoute();
 const StarRating = StarRatingModule.default;
 const rating = ref(0);
@@ -11,20 +13,25 @@ const router = useRouter();
 const addReview = async (event) => {
   const formData = new FormData(event.target);
 
-  const response = await fetch(`/vue/review/${urlID.params.id}/listing`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/x-www-form-urlencoded",
-    },
-    body: new URLSearchParams(formData),
-  });
-  if (response.ok) {
-    info.value = "Review added successfully";
-    setTimeout(() => {
-      router.push(`/listing/${urlID.params.id}`);
-    }, 1000);
+  const result = reviewCheck(formData);
+  if (result.validData) {
+    const response = await fetch(`/vue/review/${urlID.params.id}/listing`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams(formData),
+    });
+    if (response.ok) {
+      info.value = "Review added successfully";
+      setTimeout(() => {
+        router.push(`/listing/${urlID.params.id}`);
+      }, 1000);
+    } else {
+      info.value = "Something is wrong try again later";
+    }
   } else {
-    info.value = "Something is wrong try again later";
+    info.value = result.userWarning;
   }
 };
 </script>
@@ -39,7 +46,7 @@ const addReview = async (event) => {
     <br />
     <br />
 
-    <StarRating v-model:rating="rating" :increment="0.5" :show-rating="false" />
+    <StarRating v-model:rating="rating" :increment="1" :show-rating="false" />
 
     <input type="hidden" name="listingReview[listingRating]" :value="rating" />
     <br />

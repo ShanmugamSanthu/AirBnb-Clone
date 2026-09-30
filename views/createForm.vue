@@ -1,24 +1,30 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { listingCheck } from "../ClientSchema/uxValidation.js";
 
 const router = useRouter();
 const info = ref("");
 const listingForm = async (event) => {
   const formData = new FormData(event.target);
+  const result = listingCheck(formData);
 
-  const response = await fetch("/vue/listing/new/add", {
-    method: "POST",
-    body: formData,
-  });
+  if (result.validData) {
+    const response = await fetch("/vue/listing/new/add", {
+      method: "POST",
+      body: formData,
+    });
 
-  if (response.ok) {
-    info.value = "Listing created successfully redirecting to home page";
-    setTimeout(() => {
-      router.push("/");
-    }, 3000);
+    if (response.ok) {
+      info.value = "Listing created successfully redirecting to home page";
+      setTimeout(() => {
+        router.push("/");
+      }, 3000);
+    } else {
+      info.value = "Something is wrong try again later";
+    }
   } else {
-    info.value = "Something is wrong try again later";
+    info.value = result.userWarning;
   }
 };
 </script>
@@ -45,7 +51,7 @@ Add description</textarea
     <br /><br />
     <label for="Price">Price </label>
     <input
-      type="number"
+      type="text"
       name="listing[Price]"
       placeholder="Mention price"
       id="Price"

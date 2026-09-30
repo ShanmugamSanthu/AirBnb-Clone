@@ -1,5 +1,5 @@
 <script setup>
-import { initCustomFormatter, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { authNCheck } from "../utils/authCheck";
 
@@ -13,6 +13,10 @@ const info = ref("");
 onMounted(async () => {
   const response = await authNCheck(`/vue/listing/${urlID.params.id}`, router);
   if (!response) return;
+  if (response.url.endsWith("/")) {
+    router.push("/");
+    return null;
+  }
   const data = await response.json();
   listingInfo.value = data.listingData;
   reviewInfo.value = data.reviewData;
@@ -25,7 +29,9 @@ const deleteListing = async () => {
   });
   if (response.ok) {
     info.value = "Deleting please wait";
-    router.push("/");
+    setTimeout(() => {
+      router.push("/");
+    }, 2000);
   } else {
     info.value = "Something is wrong";
   }
@@ -35,9 +41,12 @@ const deleteReview = async (id) => {
   const response = await fetch(`/vue/review/delete/${id}/${urlID.params.id}`, {
     method: "DELETE",
   });
+
   if (response.ok) {
     info.value = "Deleting please wait";
-    router.push(`/listing/${urlID.params.id}`);
+    setTimeout(() => {
+      router.push(`/`);
+    }, 2000);
   } else {
     info.value = "Something is wrong";
   }

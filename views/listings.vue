@@ -9,10 +9,7 @@ const router = useRouter();
 onMounted(async () => {
   const response = await authNCheck("/vue", router);
   if (!response) return;
-  // if (response.url.includes("/user/loginpage")) {
-  //   router.push("/user/loginpage");
-  //   return;
-  // }
+
   const data = await response.json();
 
   listing.value = data;

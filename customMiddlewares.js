@@ -27,6 +27,7 @@ const listingValidation = (req, res, next) => {
 // review validation middleware
 const reviewValidation = (req, res, next) => {
   const { error: newErr } = reviewSchema.validate(req.body.listingReview);
+  console.log(newErr);
   if (newErr) {
     console.log("please add the review details accordingly");
     const newErr = new ExpressError("", 400);
@@ -56,7 +57,7 @@ const verifyEmail = async (req, res, next) => {
   }
   if (!(result.userEmail.toLowerCase() === userEmail.toLowerCase())) {
     console.log("Invalid email credentials");
-    const newErr = new ExpressError("", 400);
+    const newErr = new ExpressError("", 403);
     return next(newErr);
   }
   next();
@@ -80,6 +81,10 @@ const errorHandler = (err, req, res, next) => {
     }
     if (err.statusCode === 409) {
       res.status(409).json("Username already taken try a different name");
+      return;
+    }
+    if (err.statusCode === 403) {
+      res.status(403).json("Bad request");
       return;
     }
   }

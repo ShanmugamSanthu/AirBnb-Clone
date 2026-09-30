@@ -2,6 +2,7 @@
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { authNCheck } from "../utils/authCheck";
+import { listingCheck } from "../ClientSchema/uxValidation.js";
 
 const listingInfo = ref({});
 const urlId = useRoute();
@@ -22,18 +23,25 @@ onMounted(async () => {
 
 const saveChanges = async (event) => {
   const formData = new FormData(event.target);
-
-  const response = await fetch(`/vue/listing/edit/update/${urlId.params.id}`, {
-    method: "PATCH",
-    body: formData,
-  });
-  if (response.status === 200) {
-    info.value = "Changes updated please wait";
-    setTimeout(() => {
-      router.push(`/listing/${urlId.params.id}`);
-    }, 3000);
+  const result = listingCheck(formData);
+  if (result.validData) {
+    const response = await fetch(
+      `/vue/listing/edit/update/${urlId.params.id}`,
+      {
+        method: "PATCH",
+        body: formData,
+      },
+    );
+    if (response.status === 200) {
+      info.value = "Changes updated please wait";
+      setTimeout(() => {
+        router.push(`/listing/${urlId.params.id}`);
+      }, 3000);
+    } else {
+      info.value = "Something is wrong try again later";
+    }
   } else {
-    info.value = "Something is wrong try again later";
+    info.value = result.userWarning;
   }
 };
 </script>

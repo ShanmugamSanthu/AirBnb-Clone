@@ -34,7 +34,7 @@ export const signUp = async (req, res, next) => {
     try {
       await userAccount.register(data, password);
 
-      res.redirect("/user/loginpage");
+      res.status(201).json("Account created successfully");
     } catch (err) {
       console.log(err);
       const newError = new ExpressError("", 409);

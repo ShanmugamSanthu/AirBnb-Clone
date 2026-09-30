@@ -9,6 +9,7 @@ const userNameInfo = ref(null);
 
 const namedInfofn = async () => {
   const response = await authNCheck("/vue/user/current-user", router);
+
   if (!response) return;
   const data = await response.json();
   userAuthInfo(data.userName, router);
