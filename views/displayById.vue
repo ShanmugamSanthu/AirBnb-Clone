@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { initCustomFormatter, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { authNCheck } from "../utils/authCheck";
 
@@ -8,8 +8,8 @@ const reviewInfo = ref([]);
 const loading = ref(true);
 const urlID = useRoute();
 const router = useRouter();
+const info = ref("");
 
-// console.log(urlID.params.id);
 onMounted(async () => {
   const response = await authNCheck(`/vue/listing/${urlID.params.id}`, router);
   if (!response) return;
@@ -17,13 +17,38 @@ onMounted(async () => {
   listingInfo.value = data.listingData;
   reviewInfo.value = data.reviewData;
   loading.value = false;
-  //   console.log(listingInfo.value);
-  //   console.log(reviewInfo.value);
 });
+
+const deleteListing = async () => {
+  const response = await fetch(`/vue/listing/delete/${urlID.params.id}`, {
+    method: "DELETE",
+  });
+  if (response.ok) {
+    info.value = "Deleting please wait";
+    router.push("/");
+  } else {
+    info.value = "Something is wrong";
+  }
+};
+
+const deleteReview = async (id) => {
+  const response = await fetch(`/vue/review/delete/${id}/${urlID.params.id}`, {
+    method: "DELETE",
+  });
+  if (response.ok) {
+    info.value = "Deleting please wait";
+    router.push(`/listing/${urlID.params.id}`);
+  } else {
+    info.value = "Something is wrong";
+  }
+};
 </script>
 <template>
   <div v-if="loading">Just a moment...</div>
   <div v-else>
+    <div v-if="info">
+      <h3>{{ info }}</h3>
+    </div>
     <h2>{{ listingInfo.Title }}</h2>
     <h3>{{ listingInfo.Description }}</h3>
     <img :src="listingInfo.Image" alt="Image" />
@@ -40,12 +65,7 @@ onMounted(async () => {
     </div>
     <br />
     <div>
-      <form
-        :action="`/vue/listing/delete/${urlID.params.id}?_method=DELETE`"
-        method="post"
-      >
-        <button>Delete Listing</button>
-      </form>
+      <button @click="deleteListing">Delete Listing</button>
     </div>
   </div>
 
@@ -61,15 +81,9 @@ onMounted(async () => {
       <h4>Rating: {{ value.listingRating }}</h4>
       <h4>Author: {{ value.author.username }}</h4>
       <h4>Posted on: {{ new Date(value.createdAt).toLocaleString() }}</h4>
-      <form
-        :action="`/vue/review/delete/${value._id}/${urlID.params.id}?_method=DELETE`"
-        method="post"
-      >
-        <button>Delete Review</button>
-      </form>
+
+      <button @click="deleteReview(value._id)">Delete Review</button>
     </div>
     <hr />
   </div>
-  <a href="/">Home</a>
-  <!-- temp purpose navbar ll take over eventually-->
 </template>

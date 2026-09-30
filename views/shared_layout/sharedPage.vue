@@ -1,18 +1,29 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { ref, onMounted, watch } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import { authNCheck, userAuthInfo } from "../../utils/authCheck";
 
 const router = useRouter();
+const route = useRoute();
 const userNameInfo = ref(null);
 
-onMounted(async () => {
+const namedInfofn = async () => {
   const response = await authNCheck("/vue/user/current-user", router);
   if (!response) return;
   const data = await response.json();
   userAuthInfo(data.userName, router);
   userNameInfo.value = data.userName;
+};
+onMounted(() => {
+  namedInfofn();
 });
+
+watch(
+  () => route.path,
+  () => {
+    namedInfofn();
+  },
+);
 </script>
 <template>
   <h4 v-if="userNameInfo">Hi {{ userNameInfo }}</h4>

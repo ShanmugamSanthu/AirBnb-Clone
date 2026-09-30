@@ -1,22 +1,28 @@
 <script setup>
-// const loginForm = async (event) => {
-//   const formData = new FormData(event.target);
-//   console.log(Object.fromEntries(formData));
+import { useRouter } from "vue-router";
+const router = useRouter();
 
-//   try {
-//     const response = await fetch("/vue/user/login", {
-//       method: "POST",
-//       "content-type": "application/x-www-form-urlencoded",
-//       body: URLSearchParams(formData),
-//     });
-//   } catch (error) {}
-// };
+const loginForm = async (event) => {
+  const formData = new FormData(event.target);
+
+  const response = await fetch("/vue/user/login", {
+    method: "POST",
+    headers: {
+      "content-type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams(formData),
+  });
+
+  if (response.ok) {
+    router.push("/");
+  }
+};
 </script>
 
 <template>
   <h1>Login</h1>
   <div>
-    <form action="/vue/user/login" method="post">
+    <form @submit.prevent="loginForm">
       <label for="userEmail">Email:</label>
       <input
         type="email"

@@ -13,14 +13,22 @@ export const listingForm = (req, res) => {
 // add new listing to DB
 export const addListing = async (req, res, next) => {
   try {
-    const result = await cloudinary.uploader.upload(req.file.path);
-    await list.create({
-      ...req.body.listing,
-      publisher: req.user._id,
-      Image: result.secure_url,
-      ImagePublicID: result.public_id,
-    });
-    res.redirect("/");
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      await list.create({
+        ...req.body.listing,
+        publisher: req.user._id,
+        Image: result.secure_url,
+        ImagePublicID: result.public_id,
+      });
+      res.redirect("/");
+    } else {
+      await list.create({
+        ...req.body.listing,
+        publisher: req.user._id,
+      });
+      res.redirect("/");
+    }
   } catch (err) {
     console.log(err);
     const newErr = new ExpressError("", 500);
@@ -77,15 +85,22 @@ export const saveListingChanges = async (req, res, next) => {
         runValidators: true,
       });
 
-      res.redirect(`/listing/${listingId}`);
-      await cloudinary.uploader.destroy(mongoResult.ImagePublicID);
+      res.status(200).send();
+      if (mongoResult.ImagePublicID) {
+        await cloudinary.uploader
+          .destroy(mongoResult.ImagePublicID)
+          .catch((err) => {
+            console.log(err);
+          });
+        return null;
+      }
     } else {
       if (mongoResult.publisher.equals(req.user._id)) {
         await list.findByIdAndUpdate(listingId, req.body.listing, {
           runValidators: true,
         });
 
-        return res.redirect(`/listing/${listingId}`);
+        return res.status(200).send();
       }
       console.log("You are not the publisher cant update the listing details");
       res.redirect("/");
@@ -124,7 +139,12 @@ export const deleteListing = async (req, res, next) => {
     await list.findByIdAndDelete(listingId);
 
     res.redirect("/");
-    await cloudinary.uploader.destroy(result.ImagePublicID);
+    if (result.ImagePublicID) {
+      await cloudinary.uploader.destroy(result.ImagePublicID).catch((err) => {
+        console.log(err);
+      });
+      return null;
+    }
     return;
   } catch (err) {
     console.log(err);

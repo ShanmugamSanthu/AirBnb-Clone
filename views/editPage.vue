@@ -7,6 +7,7 @@ const listingInfo = ref({});
 const urlId = useRoute();
 const loading = ref(true);
 const router = useRouter();
+const info = ref("");
 
 onMounted(async () => {
   const response = await authNCheck(
@@ -17,18 +18,33 @@ onMounted(async () => {
   const data = await response.json();
   listingInfo.value = data.listingData;
   loading.value = false;
-  console.log(listingInfo.value);
 });
+
+const saveChanges = async (event) => {
+  const formData = new FormData(event.target);
+
+  const response = await fetch(`/vue/listing/edit/update/${urlId.params.id}`, {
+    method: "PATCH",
+    body: formData,
+  });
+  if (response.status === 200) {
+    info.value = "Changes updated please wait";
+    setTimeout(() => {
+      router.push(`/listing/${urlId.params.id}`);
+    }, 3000);
+  } else {
+    info.value = "Something is wrong try again later";
+  }
+};
 </script>
 <template>
   <h2>Change any details</h2>
   <div v-if="loading">Just a moment...</div>
   <div v-else>
-    <form
-      :action="`/vue/listing/edit/update/${urlId.params.id}?_method=PATCH`"
-      method="post"
-      enctype="multipart/form-data"
-    >
+    <div v-if="info">
+      <h3>{{ info }}</h3>
+    </div>
+    <form @submit.prevent="saveChanges">
       <label for="title">Title</label>
       <input
         type="text"
@@ -74,5 +90,4 @@ onMounted(async () => {
       <button>Save changes</button>
     </form>
   </div>
-  <a href="/">Home</a>
 </template>

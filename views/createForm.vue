@@ -1,14 +1,35 @@
-<script setup></script>
+<script setup>
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const info = ref("");
+const listingForm = async (event) => {
+  const formData = new FormData(event.target);
+
+  const response = await fetch("/vue/listing/new/add", {
+    method: "POST",
+    body: formData,
+  });
+
+  if (response.ok) {
+    info.value = "Listing created successfully redirecting to home page";
+    setTimeout(() => {
+      router.push("/");
+    }, 3000);
+  } else {
+    info.value = "Something is wrong try again later";
+  }
+};
+</script>
 <template>
   <h2>
     <div>Create a new Listing</div>
   </h2>
-  <form
-    action="/vue/listing/new/add"
-    method="post"
-    class="newListing"
-    enctype="multipart/form-data"
-  >
+  <div v-if="info">
+    <h3>{{ info }}</h3>
+  </div>
+  <form @submit.prevent="listingForm">
     <label for="title">Title </label>
     <input
       type="text"
