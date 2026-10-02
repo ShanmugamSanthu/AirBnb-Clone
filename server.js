@@ -13,6 +13,7 @@ import LocalStrategy from "passport-local";
 import userAccount from "./config_DB/models/userAccountSchema.js";
 import "dotenv/config";
 import cors from "cors";
+import bookingRoute from "./routes/bookingRoute.js";
 
 //disable or enable AUTHN for development purpose
 // import MongoStore from "connect-mongo";
@@ -67,6 +68,7 @@ app.get("/", authenticationCheck, async (req, res) => {
 app.use("/listing", listingRoute);
 app.use("/review", reviewRoute);
 app.use("/user", userAccountRoute);
+app.use("/booking", bookingRoute);
 
 app.use(errorHandler);
 app.get((req, res) => {

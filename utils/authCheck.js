@@ -1,3 +1,5 @@
+// for vue
+
 export const authNCheck = async (url, router) => {
   const response = await fetch(url);
   if (response.url.includes("/user/loginpage")) {
