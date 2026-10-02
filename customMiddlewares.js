@@ -3,6 +3,10 @@ import reviewSchema from "./serverSchema/serverSchemaReview.js";
 import userSchema from "./serverSchema/serverSchemaUser.js";
 import ExpressError from "./error.js";
 import userAccount from "./config_DB/models/userAccountSchema.js";
+import {
+  bookingGetSchema,
+  bookingPostSchema,
+} from "./serverSchema/serverBookingSchema.js";
 
 //authentication middleware
 const authenticationCheck = (req, res, next) => {
@@ -11,6 +15,30 @@ const authenticationCheck = (req, res, next) => {
   } else {
     next();
   }
+};
+
+//booking validation GET
+const bookingGetValidation = (req, res, next) => {
+  const { error: newErr } = bookingGetSchema.validate(req.query);
+  if (newErr) {
+    console.log("Invalid booking dates");
+    const newErr = new ExpressError("", 400);
+    next(newErr);
+    return;
+  }
+  next();
+};
+
+//booking validation POST
+const bookingPostValidation = (req, res, next) => {
+  const { error: newErr } = bookingPostSchema.validate(req.body);
+  if (newErr) {
+    console.log("Invalid booking details");
+    const newErr = new ExpressError("", 400);
+    return next(newErr);
+  }
+
+  next();
 };
 
 //validation middleware edit and new listings
@@ -72,7 +100,7 @@ const errorHandler = (err, req, res, next) => {
     }
     if (err.statusCode === 500) {
       console.log(err);
-      res.status(500).json("Something is wrong");
+      res.status(500).json("Something is wrong try again later");
       return;
     }
     if (err.statusCode === 200) {
@@ -97,4 +125,6 @@ export {
   reviewValidation,
   errorHandler,
   userValidation,
+  bookingGetValidation,
+  bookingPostValidation,
 };

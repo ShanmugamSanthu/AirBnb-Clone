@@ -7,6 +7,9 @@ import createForm from "./views/createForm.vue";
 import reviewForm from "./views/reviewForm.vue";
 import signup from "./views/signup.vue";
 import about from "./views/about.vue";
+import myBookings from "./views/myBookings.vue";
+import manageBookings from "./views/manageBookings.vue";
+import policyPage from "./views/policyPage.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -42,6 +45,18 @@ const router = createRouter({
     {
       path: "/aboutpage",
       component: about,
+    },
+    {
+      path: "/mybookings",
+      component: myBookings,
+    },
+    {
+      path: "/managebookings",
+      component: manageBookings,
+    },
+    {
+      path: "/cancellationPage",
+      component: policyPage,
     },
   ],
 });

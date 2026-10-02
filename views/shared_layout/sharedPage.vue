@@ -34,6 +34,8 @@ watch(
     <div class="navbar">
       <router-link to="/" v-if="userNameInfo">Home</router-link>
       <router-link to="/aboutpage">About us</router-link>
+      <router-link to="/mybookings">My Bookings</router-link>
+      <router-link to="/managebookings">Manage Bookings</router-link>
       <div v-if="userNameInfo">
         <form action="/vue/user/logout" method="post">
           <button>Logout</button>

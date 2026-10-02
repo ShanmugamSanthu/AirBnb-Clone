@@ -11,11 +11,11 @@ const bookingSchema = mongoose.Schema({
   },
   customerName: {
     type: String,
-    // required: true,
+    required: true,
   },
   customerID: {
     type: String,
-    // required: true,
+    required: true,
   },
   listingID: {
     type: String,
@@ -44,6 +44,10 @@ const bookingSchema = mongoose.Schema({
     type: Number,
     required: true,
     min: 1,
+  },
+  cancelledBy: {
+    type: String,
+    enum: ["CUSTOMER", "OWNER"],
   },
 });
 

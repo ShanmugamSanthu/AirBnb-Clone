@@ -1,10 +1,25 @@
 import express from "express";
-import { addBooking, cancelBooking } from "../controller/bookingControl.js";
+import {
+  addBooking,
+  cancelBooking,
+  checkBooking,
+  myBookings,
+  manageBookings,
+} from "../controller/bookingControl.js";
+import {
+  authenticationCheck,
+  bookingGetValidation,
+  bookingPostValidation,
+} from "../customMiddlewares.js";
 
 const router = express.Router();
 
-router.post("/:id", /*Auth middlewares*/ addBooking);
+router.get("/mybookings", authenticationCheck, myBookings); // temp name
+router.get("/managebookings", authenticationCheck, manageBookings); // temp name
 
-router.delete("/:id" /*Auth middlewares*/, cancelBooking);
+router.get("/:id", authenticationCheck, bookingGetValidation, checkBooking);
+router.post("/:id", authenticationCheck, bookingPostValidation, addBooking);
+
+router.delete("/:id", authenticationCheck, cancelBooking);
 
 export default router;
