@@ -2,7 +2,7 @@ Airbnb-Style Listing Application
 
 A full-stack Airbnb-style listing application built with Node.js, Express, MongoDB, Mongoose, Passport.js, Vue.js, and Cloudinary.
 
-The current version focuses on building and stabilizing the backend, database integration, authentication, authorization, validation, image uploads, listings, reviews, and a Vue.js frontend.
+The application includes authentication, authorization, listings, reviews, image uploads, date-based bookings, cancellation handling, and a Vue.js frontend.
 
 The application has been manually end-to-end tested across its major user flows.
 
@@ -63,6 +63,21 @@ Delete reviews
 Review ownership authorization
 Reviews are automatically removed when their associated listing is deleted
 
+Bookings
+
+Date-based booking system
+Check-in and check-out date handling
+Guest count
+Automatic booking price calculation based on listing price and booking duration
+Booking availability checks
+Date-overlap detection
+Confirmed booking storage in MongoDB
+Booking cancellation
+Seven-day cancellation policy
+Cancelled bookings remain stored in MongoDB with a `CANCELLED` status
+Cancelled bookings no longer block listing availability
+Active booking queries only return `CONFIRMED` bookings
+
 Validation & Authorization
 
 Client-side UX validation
@@ -70,6 +85,7 @@ Joi server-side validation
 Authentication middleware for protected routes
 Listing ownership checks
 Review ownership checks
+Booking authorization
 Users cannot modify or delete resources belonging to another user
 Centralized Express error handling
 
@@ -86,6 +102,6 @@ Cloudinary images are also cleaned up when their associated listing image is rep
 
 Frontend Architecture
 
-Vue Router is used for client-side navigation, while the existing Express backend continues to handle API-style requests, authentication, database operations, validation, and authorization.
+Vue Router is used for client-side navigation, while the existing Express backend continues to handle API-style requests, authentication, database operations, validation, authorization, and booking operations.
 
-The frontend communicates with the backend using fetch() for asynchronous operations.
+The frontend communicates with the backend using AJAX `fetch()` for asynchronous operations.
