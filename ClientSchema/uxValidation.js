@@ -1,7 +1,7 @@
 const loginCheck = (formData) => {
   const password = formData.get("password");
-  const username = formData.get("username");
-  const email = formData.get("userEmail");
+  const username = formData.get("username").trim();
+  const email = formData.get("userEmail").trim();
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -31,8 +31,8 @@ const loginCheck = (formData) => {
 
 const signUpCheck = (formData) => {
   const password = formData.get("password");
-  const username = formData.get("username");
-  const email = formData.get("userEmail");
+  const username = formData.get("username").trim();
+  const email = formData.get("userEmail").trim();
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 

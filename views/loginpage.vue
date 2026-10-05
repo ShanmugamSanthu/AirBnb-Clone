@@ -18,6 +18,11 @@ onMounted(async () => {
 const loginForm = async (event) => {
   const formData = new FormData(event.target);
   const result = loginCheck(formData);
+  const username = formData.get("username");
+  const email = formData.get("userEmail");
+
+  formData.set("username", username.trim());
+  formData.set("userEmail", email.trim());
   if (result.validData) {
     const response = await fetch("/vue/user/login", {
       method: "POST",

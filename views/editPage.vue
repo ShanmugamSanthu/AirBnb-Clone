@@ -24,6 +24,17 @@ onMounted(async () => {
 const saveChanges = async (event) => {
   const formData = new FormData(event.target);
   const result = listingCheck(formData);
+
+  const title = formData.get("listing[Title]");
+  const description = formData.get("listing[Description]");
+  const country = formData.get("listing[Country]");
+  const location = formData.get("listing[Location]");
+
+  formData.set("listing[Title]", title.trim());
+  formData.set("listing[Description]", description.trim());
+  formData.set("listing[Country]", country.trim());
+  formData.set("listing[Location]", location.trim());
+
   if (result.validData) {
     const response = await fetch(
       `/vue/listing/edit/update/${urlId.params.id}`,
