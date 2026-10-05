@@ -49,6 +49,11 @@ const listingsSchema = new defineSchema({
     type: mongoose.Schema.Types.ObjectId,
     required: true,
   },
+  maxGuests: {
+    type: Number,
+    required: true,
+    min: 1,
+  },
 });
 
 const list = mongoose.model("listing", listingsSchema);

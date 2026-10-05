@@ -42,19 +42,22 @@ const listingForm = async (event) => {
       name="listing[Title]"
       placeholder="Enter Property Title"
       id="title"
+      required
     />
     <br /><br />
     <label for="Description">Description </label>
-    <textarea name="listing[Description]" id="Description">
+    <textarea name="listing[Description]" id="Description" required>
 Add description</textarea
     >
     <br /><br />
     <label for="Price">Price </label>
     <input
-      type="text"
+      type="number"
       name="listing[Price]"
       placeholder="Mention price"
       id="Price"
+      required
+      min="1"
     />
 
     <br /><br />
@@ -64,6 +67,7 @@ Add description</textarea
       name="listing[Location]"
       placeholder="Enter destination/location"
       id="Location"
+      required
     />
 
     <br /><br />
@@ -73,6 +77,18 @@ Add description</textarea
       name="listing[Country]"
       placeholder="Enter country name"
       id="Country"
+      required
+    />
+
+    <br /><br />
+    <label for="maxGuests">Max number of guests allowed: </label>
+    <input
+      type="text"
+      name="listing[maxGuests]"
+      placeholder="Enter total accommodation space "
+      id="maxGuests"
+      required
+      min="1"
     />
 
     <br /><br />

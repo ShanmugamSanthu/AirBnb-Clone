@@ -116,6 +116,10 @@ export const addBooking = async (req, res, next) => {
       sendInfo.status = "Listing doesnt exist";
       return res.status(400).send(sendInfo);
     }
+    if (Number(bookingDetails.numberOfGuests) > result.maxGuests) {
+      sendInfo.status = `Number of guests cannot exceed ${result.maxGuests}`;
+      return res.status(400).json(sendInfo);
+    }
 
     const existingBookings = await booking.find({
       listingID: urlID,

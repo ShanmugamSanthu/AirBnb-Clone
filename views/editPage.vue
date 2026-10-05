@@ -59,6 +59,7 @@ const saveChanges = async (event) => {
         id="title"
         v-model="listingInfo.Title"
         name="listing[Title]"
+        required
       />
       <br />
       <label for="desc">Description</label>
@@ -66,14 +67,17 @@ const saveChanges = async (event) => {
         name="listing[Description]"
         id="desc"
         v-model="listingInfo.Description"
+        required
       ></textarea>
       <br />
       <label for="price">Price</label>
       <input
-        type="text"
+        type="number"
         id="price"
         v-model="listingInfo.Price"
         name="listing[Price]"
+        required
+        min="1"
       />
       <br />
       <label for="location">Location</label>
@@ -82,6 +86,7 @@ const saveChanges = async (event) => {
         id="location"
         v-model="listingInfo.Location"
         name="listing[Location]"
+        required
       />
       <br />
       <label for="country">Country</label>
@@ -90,11 +95,25 @@ const saveChanges = async (event) => {
         id="country"
         v-model="listingInfo.Country"
         name="listing[Country]"
+        required
       />
+      <br /><br />
+      <label for="maxGuests">Max number of guests allowed: </label>
+      <input
+        type="text"
+        name="listing[maxGuests]"
+        placeholder="Enter total accommodation space "
+        id="maxGuests"
+        required
+        min="1"
+        v-model="listingInfo.maxGuests"
+      />
+
       <br />
       <label for="img">Upload a image</label>
       <input type="file" id="img" name="listing[Image]" />
       <br />
+
       <button>Save changes</button>
     </form>
   </div>

@@ -66,12 +66,19 @@ const listingCheck = (formData) => {
   const country = formData.get("listing[Country]");
   const location = formData.get("listing[Location]");
   const price = formData.get("listing[Price]");
+  const maxGuests = formData.get("listing[maxGuests]");
 
   let validData = true;
   let userWarning = "";
 
   if (!Number.isFinite(Number(price)) || Number(price) < 1) {
     userWarning = "Please enter a valid price, price should be minimum 1 ";
+    validData = false;
+    return { validData, userWarning };
+  }
+  if (!Number.isFinite(Number(maxGuests)) || Number(maxGuests) < 1) {
+    userWarning =
+      "Please enter a valid number for maximum guests, should be minimum 1 ";
     validData = false;
     return { validData, userWarning };
   }

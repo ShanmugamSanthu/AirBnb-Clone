@@ -57,16 +57,27 @@ const signupForm = async (event) => {
     <form @submit.prevent="signupForm">
       Enter email ID:
       <input
-        type="text"
+        type="email"
         name="userEmail"
         placeholder="Enter a valid email ID"
+        required
       />
       <br /><br />
       Enter username:
-      <input type="text" name="username" placeholder="Enter a username" />
+      <input
+        type="text"
+        name="username"
+        placeholder="Enter a username"
+        required
+      />
       <br /><br />
       Enter a password:
-      <input type="text" name="password" placeholder="Enter password" />
+      <input
+        type="password"
+        name="password"
+        placeholder="Enter password"
+        required
+      />
       <br /><br />
       <button>Signup</button>
     </form>

@@ -55,10 +55,11 @@ const loginForm = async (event) => {
     <form @submit.prevent="loginForm">
       <label for="userEmail">Email:</label>
       <input
-        type="text"
+        type="email"
         id="userEmail"
         name="userEmail"
         placeholder="Enter email"
+        required
       />
 
       <br /><br />
@@ -69,6 +70,7 @@ const loginForm = async (event) => {
         id="username"
         name="username"
         placeholder="Enter username"
+        required
       />
 
       <br /><br />
@@ -79,6 +81,7 @@ const loginForm = async (event) => {
         id="password"
         name="password"
         placeholder="Enter password"
+        required
       />
 
       <br /><br />

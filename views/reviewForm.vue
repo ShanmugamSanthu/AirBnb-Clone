@@ -48,7 +48,12 @@ const addReview = async (event) => {
 
     <StarRating v-model:rating="rating" :increment="1" :show-rating="false" />
 
-    <input type="hidden" name="listingReview[listingRating]" :value="rating" />
+    <input
+      type="hidden"
+      name="listingReview[listingRating]"
+      :value="rating"
+      required
+    />
     <br />
     <br />
     <input

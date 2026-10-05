@@ -79,6 +79,10 @@ const submitBookingInfo = async (event) => {
     bookingAvailable.value = "Number of guests should be atleast 1";
     return;
   }
+  if (numberOfGuests > listingInfo.maxGuests) {
+    bookingAvailable.value = `Number of guests cannot exceed ${listingInfo.maxGuests}`;
+    return;
+  }
 
   const response = await fetch(`/vue/booking/${urlID.params.id}`, {
     method: "POST",
@@ -143,6 +147,7 @@ const today = new Date().toISOString().split("T")[0];
     <h4>Location: {{ listingInfo.Location }}</h4>
     <h4>Price: &#8377;{{ listingInfo.Price.toLocaleString("en-IN") }}</h4>
     <h4>Country: {{ listingInfo.Country }}</h4>
+    <h4>Maximum number of poeple allowed: {{ listingInfo.maxGuests }}</h4>
     <h4>Posted by: {{ listingInfo.publisher.username }}</h4>
   </div>
   <hr />

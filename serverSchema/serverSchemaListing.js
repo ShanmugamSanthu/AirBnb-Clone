@@ -7,6 +7,7 @@ const listingSchema = Joi.object({
   Location: Joi.string().required(),
   Country: Joi.string().required(),
   Image: Joi.string().uri().allow(""),
+  maxGuests: Joi.number().min(1).required(),
 });
 
 export default listingSchema;
