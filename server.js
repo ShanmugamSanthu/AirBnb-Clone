@@ -31,10 +31,13 @@ const sessionOptions = {
   //   mongoUrl: process.env.MONGO_URL,
   // }),
 
+
   cookie: {
     httpOnly: true,
-    sameSite: "lax",
+    sameSite: "none",
+    secure: true,
   },
+
 };
 app.use(session(sessionOptions));
 app.use(express.static("public"));
