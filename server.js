@@ -39,6 +39,11 @@ const sessionOptions = {
   },
 
 };
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
+}));
+
 app.use(session(sessionOptions));
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
@@ -49,10 +54,6 @@ app.use(passport.session());
 passport.use(new LocalStrategy(userAccount.authenticate()));
 passport.serializeUser(userAccount.serializeUser());
 passport.deserializeUser(userAccount.deserializeUser());
-app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true,
-}));
 
 //connect DB and server
 connectDB()
