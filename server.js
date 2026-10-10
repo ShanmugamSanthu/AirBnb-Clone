@@ -20,6 +20,7 @@ import bookingRoute from "./routes/bookingRoute.js";
 
 //middlewares
 const app = express();
+const PORT = process.env.PORT || 8080;
 const sessionOptions = {
   secret: process.env.SECRET_KEY,
   resave: false,
@@ -45,13 +46,16 @@ app.use(passport.session());
 passport.use(new LocalStrategy(userAccount.authenticate()));
 passport.serializeUser(userAccount.serializeUser());
 passport.deserializeUser(userAccount.deserializeUser());
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
+}));
 
 //connect DB and server
 connectDB()
   .then(() => {
     console.log("DataBase Connected Successfully");
-    app.listen(8080, "0.0.0.0", () => {
+    app.listen(PORT, "0.0.0.0", () => {
       console.log("Server Live");
     });
   })

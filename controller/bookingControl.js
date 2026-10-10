@@ -9,8 +9,6 @@ import ExpressError from "../error.js";
 export const checkBooking = async (req, res, next) => {
   const bookingDetails = req.query;
 
-  console.log(bookingDetails);
-
   const sendInfo = {};
 
   const checkInDate = parseCalendarDate(bookingDetails.checkInDate);
@@ -148,7 +146,6 @@ export const addBooking = async (req, res, next) => {
     }
 
     if (isAvailable) {
-      console.log("REQ USER:", req.user);
       const bookingObj = {};
       bookingObj.ownerName = `${result.publisher.username}`;
       bookingObj.ownerID = `${result.publisher._id}`;
@@ -234,7 +231,7 @@ export const myBookings = async (req, res, next) => {
   const customerID = req.user?._id;
   try {
     const result = await booking.find({ customerID: customerID });
-    console.log(result);
+
     res.status(200).json(result);
     return;
   } catch (error) {
@@ -249,7 +246,6 @@ export const manageBookings = async (req, res, next) => {
   const ownerID = req.user?._id;
   try {
     const result = await booking.find({ ownerID: ownerID });
-    console.log(result);
     res.status(200).json(result);
     return;
   } catch (error) {
