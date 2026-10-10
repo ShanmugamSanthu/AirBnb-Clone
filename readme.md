@@ -1,107 +1,94 @@
-Airbnb-Style Listing Application
+Travel Bingo — Airbnb-Style Listing Application
 
-A full-stack Airbnb-style listing application built with Node.js, Express, MongoDB, Mongoose, Passport.js, Vue.js, and Cloudinary.
+A full-stack Airbnb-style listing and booking application built with Node.js, Express, MongoDB, Vue.js, and Cloudinary.
 
-The application includes authentication, authorization, listings, reviews, image uploads, date-based bookings, cancellation handling, and a Vue.js frontend.
+Travel Bingo allows users to create and manage property listings, upload images, leave reviews, and make date-based bookings. The application includes session-based authentication, resource-level authorization, booking availability checks, cancellation handling, and a responsive Vue.js frontend.
 
 The application has been manually end-to-end tested across its major user flows.
 
-Tech Stack
+Features
 
-Backend
+Authentication & Sessions
 
-Node.js
-Express.js
-MongoDB
-Mongoose
-Passport.js
-Passport Local Mongoose
-Express Session
-Connect-Mongo
-Joi
-Multer
-Cloudinary
-
-Frontend
-
-Vue.js
-Vue Router
-JavaScript
-Vite
-HTML
-CSS
-
-User Authentication
-
-User signup
-User login
-User logout
-Session-based authentication
-MongoDB-backed sessions
-Username and password authentication through Passport
-Email verification during login
-Email uniqueness check during signup
-Client-side UX validation
-Server-side user validation
+- User signup, login, and logout
+- Username and password authentication using Passport.js
+- Session-based authentication with Express Session
+- MongoDB-backed session storage using Connect-Mongo
+- Email verification during login
+- Email uniqueness validation during signup
+- Client-side UX validation and server-side user validation
 
 Listings
 
-Create listings
-View listings
-Edit listings
-Delete listings
-Image upload through Cloudinary
-Replace listing images during updates
-Listing ownership authorization
-Protected listing routes
+- Create, view, edit, and delete listings
+- Upload listing images through Cloudinary
+- Replace images when updating a listing
+- Listing ownership authorization
+- Protected listing routes
 
 Reviews
 
-Create reviews
-Display reviews
-Delete reviews
-Review ownership authorization
-Reviews are automatically removed when their associated listing is deleted
+- Create, display, and delete reviews
+- Review ownership authorization
+- Automatically remove associated reviews when a listing is deleted
 
-Bookings
+Booking Management
 
-Date-based booking system
-Check-in and check-out date handling
-Guest count
-Automatic booking price calculation based on listing price and booking duration
-Booking availability checks
-Date-overlap detection
-Confirmed booking storage in MongoDB
-Booking cancellation
-Seven-day cancellation policy
-Cancelled bookings remain stored in MongoDB with a `CANCELLED` status
-Cancelled bookings no longer block listing availability
-Active booking queries only return `CONFIRMED` bookings
+- Date-based check-in and check-out
+- Guest count support
+- Automatic price calculation based on listing price and booking duration
+- Availability checks and date-overlap detection
+- Booking creation, viewing, and cancellation
+- Seven-day cancellation policy
+- Cancelled bookings remain stored with a `CANCELLED` status
+- Cancelled bookings no longer block listing availability
+- Active booking queries return only `CONFIRMED` bookings
+- Booking authorization to prevent unauthorized access to other users' bookings
 
-Validation & Authorization
+Validation & Error Handling
 
-Client-side UX validation
-Joi server-side validation
-Authentication middleware for protected routes
-Listing ownership checks
-Review ownership checks
-Booking authorization
-Users cannot modify or delete resources belonging to another user
-Centralized Express error handling
+- Client-side UX validation
+- Server-side request validation using Joi
+- Authentication middleware for protected routes
+- Listing, review, and booking authorization
+- Centralized Express error handling
 
-Image Handling
+Image Management
 
-Listing images are uploaded using Multer and stored on Cloudinary.
+- Multer handles incoming image uploads
+- Cloudinary stores listing images
+- MongoDB stores each image's secure URL and public ID
+- Old Cloudinary images are cleaned up when replaced or when their listing is deleted
 
-The MongoDB listing document stores:
+Tech Stack
 
-Cloudinary secure URL
-Cloudinary public ID
+| Area                | Technologies                         |
+| ------------------- | ------------------------------------ |
+| Backend             | Node.js, Express.js                  |
+| Database            | MongoDB, Mongoose                    |
+| Authentication      | Passport.js, Passport Local Mongoose |
+| Sessions            | Express Session, Connect-Mongo       |
+| Validation          | Joi                                  |
+| Image uploads       | Multer, Cloudinary                   |
+| Frontend            | Vue.js, Vue Router                   |
+| Build tool          | Vite                                 |
+| Languages & styling | JavaScript, HTML, CSS                |
 
-Cloudinary images are also cleaned up when their associated listing image is replaced or the listing is deleted.
+Architecture
 
-Frontend Architecture
+The application uses a Vue.js frontend with Vue Router for client-side navigation and an Express backend for server-side operations.
 
-Vue Router is used for client-side navigation, while the existing Express backend continues to handle API-style requests, authentication, database operations, validation, authorization, and booking operations.
+- Frontend: Renders the user interface and handles client-side navigation.
+- Backend: Handles authentication, sessions, API requests, validation, authorization, listings, reviews, and bookings.
+- Database: MongoDB stores users, listings, reviews, bookings, and session data.
+- Image storage: Cloudinary stores listing images, while MongoDB stores image metadata.
 
-The frontend communicates with the backend using AJAX `fetch()` for asynchronous operations.
+The frontend communicates with the backend using asynchronous `fetch()` requests.
+
+Testing
+
+The application has been manually end-to-end tested across its major user flows, including authentication, listing management, reviews, booking availability, and cancellation handling.
+
+Author
+
+Shanmugam
