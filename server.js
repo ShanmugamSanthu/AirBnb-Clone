@@ -20,6 +20,7 @@ import bookingRoute from "./routes/bookingRoute.js";
 
 //middlewares
 const app = express();
+app.set("trust proxy", 1);
 const PORT = process.env.PORT || 8080;
 const sessionOptions = {
   secret: process.env.SECRET_KEY,
