@@ -3,12 +3,13 @@ import { useRouter } from "vue-router";
 import { loginCheck } from "../ClientSchema/uxValidation.js";
 import { ref } from "vue";
 import { onMounted } from "vue";
+import { apiFetch } from "../api.js";
 
 const router = useRouter();
 const info = ref("");
 
 onMounted(async () => {
-  const response = await fetch("/vue/user/current-user");
+  const response = await apiFetch("/vue/user/current-user");
   const data = await response.json();
 
   if (data.userName) {
@@ -24,7 +25,7 @@ const loginForm = async (event) => {
   formData.set("username", username.trim());
   formData.set("userEmail", email.trim());
   if (result.validData) {
-    const response = await fetch("/vue/user/login", {
+    const response = await apiFetch("/vue/user/login", {
       method: "POST",
       headers: {
         "content-type": "application/x-www-form-urlencoded",
@@ -50,26 +51,50 @@ const loginForm = async (event) => {
 </script>
 
 <template>
-  <section class="auth-page"><header class="auth-brand"><h1>Travel Bingo</h1><p>Your dream destination at your fingertips</p></header><div class="surface stack"><h2>Welcome back</h2><div v-if="info" class="notice" role="status">{{ info }}</div><form class="form-fields" @submit.prevent="loginForm"><div class="form-field"><label for="userEmail">Email</label>
-      <input
-        type="email"
-        id="userEmail"
-        name="userEmail"
-        placeholder="Enter email"
-        required
-      /></div><div class="form-field"><label for="username">Username</label>
-      <input
-        type="text"
-        id="username"
-        name="username"
-        placeholder="Enter username"
-        required
-      /></div><div class="form-field"><label for="password">Password</label>
-      <input
-        type="password"
-        id="password"
-        name="password"
-        placeholder="Enter password"
-        required
-      /></div><button type="submit">Login</button></form><router-link to="/user/signuppage">Don’t have an account? Sign up here</router-link></div></section>
+  <section class="auth-page">
+    <header class="auth-brand">
+      <h1>Travel Bingo</h1>
+      <p>Your dream destination at your fingertips</p>
+    </header>
+    <div class="surface stack">
+      <h2>Welcome back</h2>
+      <div v-if="info" class="notice" role="status">{{ info }}</div>
+      <form class="form-fields" @submit.prevent="loginForm">
+        <div class="form-field">
+          <label for="userEmail">Email</label>
+          <input
+            type="email"
+            id="userEmail"
+            name="userEmail"
+            placeholder="Enter email"
+            required
+          />
+        </div>
+        <div class="form-field">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Enter username"
+            required
+          />
+        </div>
+        <div class="form-field">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter password"
+            required
+          />
+        </div>
+        <button type="submit">Login</button>
+      </form>
+      <router-link to="/user/signuppage"
+        >Don’t have an account? Sign up here</router-link
+      >
+    </div>
+  </section>
 </template>

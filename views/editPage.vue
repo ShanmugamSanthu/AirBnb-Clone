@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { authNCheck } from "../utils/authCheck";
 import { listingCheck } from "../ClientSchema/uxValidation.js";
+import { apiFetch } from "../api.js";
 
 const listingInfo = ref({});
 const urlId = useRoute();
@@ -36,7 +37,7 @@ const saveChanges = async (event) => {
   formData.set("listing[Location]", location.trim());
 
   if (result.validData) {
-    const response = await fetch(
+    const response = await apiFetch(
       `/vue/listing/edit/update/${urlId.params.id}`,
       {
         method: "PATCH",
@@ -57,49 +58,80 @@ const saveChanges = async (event) => {
 };
 </script>
 <template>
-  <section class="page"><header class="page-heading"><h1>Change listing details</h1></header><div v-if="loading" class="empty-state">Just a moment...</div><div v-else class="surface form-card stack"><div v-if="info" class="notice" role="status">{{ info }}</div><form class="form-fields" @submit.prevent="saveChanges"><div class="form-field"><label for="title">Title</label>
-      <input
-        type="text"
-        id="title"
-        v-model="listingInfo.Title"
-        name="listing[Title]"
-        required
-      /></div><div class="form-field"><label for="desc">Description</label>
-      <textarea
-        name="listing[Description]"
-        id="desc"
-        v-model="listingInfo.Description"
-        required
-      ></textarea></div><div class="form-field"><label for="price">Price</label>
-      <input
-        type="number"
-        id="price"
-        v-model="listingInfo.Price"
-        name="listing[Price]"
-        required
-        min="1"
-      /></div><div class="form-field"><label for="location">Location</label>
-      <input
-        type="text"
-        id="location"
-        v-model="listingInfo.Location"
-        name="listing[Location]"
-        required
-      /></div><div class="form-field"><label for="country">Country</label>
-      <input
-        type="text"
-        id="country"
-        v-model="listingInfo.Country"
-        name="listing[Country]"
-        required
-      /></div><div class="form-field"><label for="maxGuests">Max number of guests allowed</label>
-      <input
-        type="text"
-        name="listing[maxGuests]"
-        placeholder="Enter total accommodation space "
-        id="maxGuests"
-        required
-        min="1"
-        v-model="listingInfo.maxGuests"
-      /></div><div class="form-field"><label for="img">Upload an image</label><input type="file" id="img" name="listing[Image]" /></div><button>Save changes</button></form></div></section>
+  <section class="page">
+    <header class="page-heading"><h1>Change listing details</h1></header>
+    <div v-if="loading" class="empty-state">Just a moment...</div>
+    <div v-else class="surface form-card stack">
+      <div v-if="info" class="notice" role="status">{{ info }}</div>
+      <form class="form-fields" @submit.prevent="saveChanges">
+        <div class="form-field">
+          <label for="title">Title</label>
+          <input
+            type="text"
+            id="title"
+            v-model="listingInfo.Title"
+            name="listing[Title]"
+            required
+          />
+        </div>
+        <div class="form-field">
+          <label for="desc">Description</label>
+          <textarea
+            name="listing[Description]"
+            id="desc"
+            v-model="listingInfo.Description"
+            required
+          ></textarea>
+        </div>
+        <div class="form-field">
+          <label for="price">Price</label>
+          <input
+            type="number"
+            id="price"
+            v-model="listingInfo.Price"
+            name="listing[Price]"
+            required
+            min="1"
+          />
+        </div>
+        <div class="form-field">
+          <label for="location">Location</label>
+          <input
+            type="text"
+            id="location"
+            v-model="listingInfo.Location"
+            name="listing[Location]"
+            required
+          />
+        </div>
+        <div class="form-field">
+          <label for="country">Country</label>
+          <input
+            type="text"
+            id="country"
+            v-model="listingInfo.Country"
+            name="listing[Country]"
+            required
+          />
+        </div>
+        <div class="form-field">
+          <label for="maxGuests">Max number of guests allowed</label>
+          <input
+            type="text"
+            name="listing[maxGuests]"
+            placeholder="Enter total accommodation space "
+            id="maxGuests"
+            required
+            min="1"
+            v-model="listingInfo.maxGuests"
+          />
+        </div>
+        <div class="form-field">
+          <label for="img">Upload an image</label
+          ><input type="file" id="img" name="listing[Image]" />
+        </div>
+        <button>Save changes</button>
+      </form>
+    </div>
+  </section>
 </template>

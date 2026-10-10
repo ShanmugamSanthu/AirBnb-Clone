@@ -1,11 +1,12 @@
 <script setup>
 import { onMounted, ref } from "vue";
+import { apiFetch } from "../api.js";
 
 const userBookings = ref([]);
 const info = ref("");
 
 const runFn = async () => {
-  const response = await fetch("/vue/booking/managebookings", {
+  const response = await apiFetch("/vue/booking/managebookings", {
     method: "GET",
   });
 
@@ -34,7 +35,7 @@ const formatDate = (date) => {
 
 const cancelPopup = async (id) => {
   if (window.confirm("Are you sure to cancel the booking")) {
-    const response = await fetch(`/vue/booking/${id}`, {
+    const response = await apiFetch(`/vue/booking/${id}`, {
       method: "DELETE",
     });
 

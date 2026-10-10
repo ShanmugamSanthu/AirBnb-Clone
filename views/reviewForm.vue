@@ -3,6 +3,7 @@ import StarRatingModule from "vue-star-rating";
 import { ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { reviewCheck } from "../ClientSchema/uxValidation.js";
+import { apiFetch } from "../api.js";
 
 const urlID = useRoute();
 const StarRating = StarRatingModule.default;
@@ -15,7 +16,7 @@ const addReview = async (event) => {
 
   const result = reviewCheck(formData);
   if (result.validData) {
-    const response = await fetch(`/vue/review/${urlID.params.id}/listing`, {
+    const response = await apiFetch(`/vue/review/${urlID.params.id}/listing`, {
       method: "POST",
       headers: {
         "content-type": "application/x-www-form-urlencoded",
@@ -36,23 +37,38 @@ const addReview = async (event) => {
 };
 </script>
 <template>
-  <section class="page"><header class="page-heading"><h1>Leave your thoughts</h1></header><form class="surface form-card form-fields" @submit.prevent="addReview">
-    <div v-if="info" class="notice" role="status">{{ info }}</div>
-    <p id="ratingWarning"></p>
-    <div class="form-field"><label for="review-comment">Your review</label><textarea id="review-comment" name="listingReview[listingComment]"> Write a review</textarea></div>
-    <div class="form-field"><label>Your rating</label><StarRating v-model:rating="rating" :increment="1" :show-rating="false" /></div>
+  <section class="page">
+    <header class="page-heading"><h1>Leave your thoughts</h1></header>
+    <form class="surface form-card form-fields" @submit.prevent="addReview">
+      <div v-if="info" class="notice" role="status">{{ info }}</div>
+      <p id="ratingWarning"></p>
+      <div class="form-field">
+        <label for="review-comment">Your review</label
+        ><textarea id="review-comment" name="listingReview[listingComment]">
+ Write a review</textarea
+        >
+      </div>
+      <div class="form-field">
+        <label>Your rating</label
+        ><StarRating
+          v-model:rating="rating"
+          :increment="1"
+          :show-rating="false"
+        />
+      </div>
 
-    <input
-      type="hidden"
-      name="listingReview[listingRating]"
-      :value="rating"
-      required
-    />
-    <input
-      type="hidden"
-      :value="`${urlID.params.id}`"
-      name="listingReview[listingID]"
-    />
-    <button>Submit</button>
-  </form></section>
+      <input
+        type="hidden"
+        name="listingReview[listingRating]"
+        :value="rating"
+        required
+      />
+      <input
+        type="hidden"
+        :value="`${urlID.params.id}`"
+        name="listingReview[listingID]"
+      />
+      <button>Submit</button>
+    </form>
+  </section>
 </template>
