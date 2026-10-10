@@ -17,6 +17,7 @@ router.get("/loginpage", loginForm);
 router.get("/signuppage", signUpForm);
 
 //login form
+
 router.post(
   "/login",
   userValidation,
@@ -24,19 +25,17 @@ router.post(
   passport.authenticate("local", {
     failWithError: true,
   }),
-  (err, req, res, next) => {
-    if (err) {
-      if (err.statusCode === 400 || err.statusCode === 403) {
+  (req, res, next) => {
+    req.session.save((err) => {
+      if (err) {
         return next(err);
       }
 
-      return res.status(401).json("Invalid username or password");
-    }
-
-    next();
-  },
-  (req, res) => {
-    res.redirect("/");
+      res.status(200).json({
+        success: true,
+        userName: req.user.username,
+      });
+    });
   },
 );
 
