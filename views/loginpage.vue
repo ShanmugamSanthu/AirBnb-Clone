@@ -33,7 +33,7 @@ const loginForm = async (event) => {
       body: new URLSearchParams(formData),
     });
 
-    if (response.status === 200) {
+    if (response.ok) {
       router.push("/");
     } else if (response.status === 400) {
       info.value = "Account doesn't exist. Please create an account.";
