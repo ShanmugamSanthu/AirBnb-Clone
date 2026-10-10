@@ -2,6 +2,24 @@
 import { ref, onMounted, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { authNCheck, userAuthInfo } from "../../utils/authCheck";
+import { apiFetch } from "../../api.js";
+
+const handleLogout = async () => {
+  try {
+    const response = await apiFetch("/vue/user/logout", {
+      method: "POST",
+    });
+
+    if (response.ok) {
+      userNameInfo.value = null;
+      router.push("/loginpage");
+    } else {
+      console.error("Logout failed:", response.status);
+    }
+  } catch (error) {
+    console.error("Logout error:", error);
+  }
+};
 
 const router = useRouter();
 const route = useRoute();
@@ -39,9 +57,9 @@ watch(
         <router-link to="/mybookings">My Bookings</router-link>
         <router-link to="/managebookings">Manage Bookings</router-link>
         <div v-if="userNameInfo">
-          <form action="/vue/user/logout" method="post">
-            <button>Logout</button>
-          </form>
+          <div v-if="userNameInfo">
+            <button @click="handleLogout">Logout</button>
+          </div>
         </div>
       </nav>
     </div>
