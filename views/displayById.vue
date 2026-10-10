@@ -136,82 +136,26 @@ const checkBooking = async (event) => {
 const today = new Date().toISOString().split("T")[0];
 </script>
 <template>
-  <div v-if="loading">Just a moment...</div>
-  <div v-else>
-    <div v-if="info">
-      <h3>{{ info }}</h3>
-    </div>
-    <h2>{{ listingInfo.Title }}</h2>
-    <h3>{{ listingInfo.Description }}</h3>
-    <img :src="listingInfo.Image" alt="Image" />
-    <h4>Location: {{ listingInfo.Location }}</h4>
-    <h4>Price: &#8377;{{ listingInfo.Price.toLocaleString("en-IN") }}</h4>
-    <h4>Country: {{ listingInfo.Country }}</h4>
-    <h4>Maximum number of poeple allowed: {{ listingInfo.maxGuests }}</h4>
-    <h4>Posted by: {{ listingInfo.publisher.username }}</h4>
-  </div>
-  <hr />
-  <hr />
-  <div>
-    <h3>Book this place</h3>
-    <form @submit.prevent="submitBookingInfo">
-      <label for="inDate">Check-in Date: </label>
+  <section class="page"><div v-if="loading" class="empty-state">Just a moment...</div><div v-else class="detail-grid"><article class="stack-lg"><div v-if="info" class="notice" role="status">{{ info }}</div><div class="stack"><h1>{{ listingInfo.Title }}</h1><p class="muted">{{ listingInfo.Description }}</p></div><img class="detail-image" :src="listingInfo.Image" :alt="listingInfo.Title" /><div class="surface facts"><span>Location: {{ listingInfo.Location }}</span><span>Price: &#8377;{{ listingInfo.Price.toLocaleString("en-IN") }}</span><span>Country: {{ listingInfo.Country }}</span><span>Maximum guests: {{ listingInfo.maxGuests }}</span><span>Posted by: {{ listingInfo.publisher.username }}</span></div><div class="cluster"><router-link class="button" :to="`/listing/edit/${urlID.params.id}`">Edit Listing</router-link><button class="danger" @click="deleteListing">Delete Listing</button></div></article><aside class="surface booking-card stack"><h2>Book this place</h2><form class="form-fields" @submit.prevent="submitBookingInfo"><div class="form-field"><label for="inDate">Check-in date</label>
       <input
         type="date"
         name="checkInDate"
         id="inDate"
         :min="today"
-      /><br /><br />
-      <label for="outDate">Check-out Date: </label>
+      /></div><div class="form-field"><label for="outDate">Check-out date</label>
       <input
         type="date"
         name="checkOutDate"
         id="outDate"
         :min="today"
-      /><br /><br />
+      /></div>
       <div v-if="bookedPrice">
-        <label for="guests">Number of guests: </label>
-        <input type="number" name="numberOfGuests" id="guests" /><br /><br />
-        <label for="price"
-          >Total Price: &#8377;{{ bookedPrice.toLocaleString("en-IN") }}</label
-        >
-        <br /><br />
+        <div class="form-field"><label for="guests">Number of guests</label><input type="number" name="numberOfGuests" id="guests" /></div><p>Total Price: &#8377;{{ bookedPrice.toLocaleString("en-IN") }}</p>
         <button>Reserve</button>
       </div>
-      <div>
-        <h4>{{ bookingAvailable }}</h4>
-      </div>
+      <div v-if="bookingAvailable" class="notice" role="status">{{ bookingAvailable }}</div>
       <button type="button" @click="checkBooking" v-if="!bookedPrice">
         Check Availability
       </button>
-    </form>
-  </div>
-  <br />
-  <hr />
-  <div>
-    <div>
-      <router-link :to="`/listing/edit/${urlID.params.id}`">
-        Edit Listing
-      </router-link>
-    </div>
-
-    <div>
-      <button @click="deleteListing">Delete Listing</button>
-    </div>
-  </div>
-
-  <h2>Hear from people about this place</h2>
-  <router-link :to="`/review/new/${urlID.params.id}`">Add a review</router-link>
-  <br />
-  <div v-for="value in reviewInfo">
-    <div>
-      <h4>{{ value.listingComment }}</h4>
-      <h4>Rating: {{ value.listingRating }}</h4>
-      <h4>Author: {{ value.author.username }}</h4>
-      <h4>Posted on: {{ new Date(value.createdAt).toLocaleString() }}</h4>
-
-      <button @click="deleteReview(value._id)">Delete Review</button>
-    </div>
-    <hr />
-  </div>
+    </form></aside></div><section class="stack-lg" style="margin-top:2rem"><div class="page-heading"><h2>Hear from people about this place</h2><router-link class="button" :to="`/review/new/${urlID.params.id}`">Add a review</router-link></div><div class="review-list"><article v-for="value in reviewInfo" :key="value._id" class="surface review-card"><p>{{ value.listingComment }}</p><span class="muted">Rating: {{ value.listingRating }} · Author: {{ value.author.username }}</span><span class="muted">Posted on: {{ new Date(value.createdAt).toLocaleString() }}</span><button class="danger" @click="deleteReview(value._id)">Delete Review</button></article></div></section></section>
 </template>

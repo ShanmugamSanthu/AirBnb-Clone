@@ -51,42 +51,26 @@ const signupForm = async (event) => {
 };
 </script>
 <template>
-  <div><h1>Travel Bingo-Your Dream Destination at your finger tips</h1></div>
-  <hr />
-  <h1>Signup</h1>
-  <div v-if="info">
-    <h3>{{ info }}</h3>
-  </div>
-  <div>
-    <form @submit.prevent="signupForm">
-      Enter email ID:
+  <section class="auth-page"><header class="auth-brand"><h1>Travel Bingo</h1><p>Your dream destination at your fingertips</p></header><div class="surface stack"><h2>Create your account</h2><div v-if="info" class="notice" role="status">{{ info }}</div><form class="form-fields" @submit.prevent="signupForm"><div class="form-field"><label for="signup-email">Email ID</label>
       <input
         type="email"
+        id="signup-email"
         name="userEmail"
         placeholder="Enter a valid email ID"
         required
-      />
-      <br /><br />
-      Enter username:
+      /></div><div class="form-field"><label for="signup-username">Username</label>
       <input
         type="text"
+        id="signup-username"
         name="username"
         placeholder="Enter a username"
         required
-      />
-      <br /><br />
-      Enter a password:
+      /></div><div class="form-field"><label for="signup-password">Password</label>
       <input
         type="password"
+        id="signup-password"
         name="password"
         placeholder="Enter password"
         required
-      />
-      <br /><br />
-      <button>Signup</button>
-    </form>
-  </div>
-  <router-link to="/user/loginpage"
-    >If you already have a account login here</router-link
-  >
+      /></div><button>Signup</button></form><router-link to="/user/loginpage">Already have an account? Log in here</router-link></div></section>
 </template>

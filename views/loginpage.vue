@@ -50,51 +50,26 @@ const loginForm = async (event) => {
 </script>
 
 <template>
-  <div><h1>Travel Bingo-Your Dream Destination at your finger tips</h1></div>
-  <hr />
-  <h1>Login</h1>
-  <div v-if="info">
-    <h3>{{ info }}</h3>
-  </div>
-  <div>
-    <form @submit.prevent="loginForm">
-      <label for="userEmail">Email:</label>
+  <section class="auth-page"><header class="auth-brand"><h1>Travel Bingo</h1><p>Your dream destination at your fingertips</p></header><div class="surface stack"><h2>Welcome back</h2><div v-if="info" class="notice" role="status">{{ info }}</div><form class="form-fields" @submit.prevent="loginForm"><div class="form-field"><label for="userEmail">Email</label>
       <input
         type="email"
         id="userEmail"
         name="userEmail"
         placeholder="Enter email"
         required
-      />
-
-      <br /><br />
-
-      <label for="username">Username:</label>
+      /></div><div class="form-field"><label for="username">Username</label>
       <input
         type="text"
         id="username"
         name="username"
         placeholder="Enter username"
         required
-      />
-
-      <br /><br />
-
-      <label for="password">Password:</label>
+      /></div><div class="form-field"><label for="password">Password</label>
       <input
         type="password"
         id="password"
         name="password"
         placeholder="Enter password"
         required
-      />
-
-      <br /><br />
-
-      <button type="submit">Login</button>
-    </form>
-  </div>
-  <router-link to="/user/signuppage"
-    >If you dont have a account signup here</router-link
-  >
+      /></div><button type="submit">Login</button></form><router-link to="/user/signuppage">Don’t have an account? Sign up here</router-link></div></section>
 </template>

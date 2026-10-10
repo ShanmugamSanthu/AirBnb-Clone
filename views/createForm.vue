@@ -39,28 +39,16 @@ const listingForm = async (event) => {
 };
 </script>
 <template>
-  <h2>
-    <div>Create a new Listing</div>
-  </h2>
-  <div v-if="info">
-    <h3>{{ info }}</h3>
-  </div>
-  <form @submit.prevent="listingForm">
-    <label for="title">Title </label>
+  <section class="page"><header class="page-heading"><h1>Create a new listing</h1></header>
+  <div class="surface form-card stack"><div v-if="info" class="notice" role="status">{{ info }}</div>
+  <form class="form-fields" @submit.prevent="listingForm"><div class="form-field"><label for="title">Title</label>
     <input
       type="text"
       name="listing[Title]"
       placeholder="Enter Property Title"
       id="title"
       required
-    />
-    <br /><br />
-    <label for="Description">Description </label>
-    <textarea name="listing[Description]" id="Description" required>
-Add property description</textarea
-    >
-    <br /><br />
-    <label for="Price">Price </label>
+    /></div><div class="form-field"><label for="Description">Description</label><textarea name="listing[Description]" id="Description" required>Add property description</textarea></div><div class="form-field"><label for="Price">Price</label>
     <input
       type="number"
       name="listing[Price]"
@@ -68,30 +56,21 @@ Add property description</textarea
       id="Price"
       required
       min="1"
-    />
-
-    <br /><br />
-    <label for="Location">Location </label>
+    /></div><div class="form-field"><label for="Location">Location</label>
     <input
       type="text"
       name="listing[Location]"
       placeholder="Enter destination/location"
       id="Location"
       required
-    />
-
-    <br /><br />
-    <label for="Country">Country </label>
+    /></div><div class="form-field"><label for="Country">Country</label>
     <input
       type="text"
       name="listing[Country]"
       placeholder="Enter country name"
       id="Country"
       required
-    />
-
-    <br /><br />
-    <label for="maxGuests">Max number of guests allowed: </label>
+    /></div><div class="form-field"><label for="maxGuests">Max number of guests allowed</label>
     <input
       type="number"
       name="listing[maxGuests]"
@@ -99,12 +78,5 @@ Add property description</textarea
       id="maxGuests"
       required
       min="1"
-    />
-
-    <br /><br />
-    <label for="img">Upload a image </label>
-    <input type="file" name="listing[Image]" id="img" />
-    <br /><br />
-    <button type="submit">Add Listing</button>
-  </form>
+    /></div><div class="form-field"><label for="img">Upload an image</label><input type="file" name="listing[Image]" id="img" /></div><button type="submit">Add Listing</button></form></div></section>
 </template>

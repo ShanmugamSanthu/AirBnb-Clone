@@ -36,17 +36,11 @@ const addReview = async (event) => {
 };
 </script>
 <template>
-  <h2>Leave your thoughts about this place</h2>
-  <div v-if="info">
-    <h3>{{ info }}</h3>
-  </div>
-  <form @submit.prevent="addReview">
+  <section class="page"><header class="page-heading"><h1>Leave your thoughts</h1></header><form class="surface form-card form-fields" @submit.prevent="addReview">
+    <div v-if="info" class="notice" role="status">{{ info }}</div>
     <p id="ratingWarning"></p>
-    <textarea name="listingReview[listingComment]"> Write a review</textarea>
-    <br />
-    <br />
-
-    <StarRating v-model:rating="rating" :increment="1" :show-rating="false" />
+    <div class="form-field"><label for="review-comment">Your review</label><textarea id="review-comment" name="listingReview[listingComment]"> Write a review</textarea></div>
+    <div class="form-field"><label>Your rating</label><StarRating v-model:rating="rating" :increment="1" :show-rating="false" /></div>
 
     <input
       type="hidden"
@@ -54,13 +48,11 @@ const addReview = async (event) => {
       :value="rating"
       required
     />
-    <br />
-    <br />
     <input
       type="hidden"
       :value="`${urlID.params.id}`"
       name="listingReview[listingID]"
     />
     <button>Submit</button>
-  </form>
+  </form></section>
 </template>

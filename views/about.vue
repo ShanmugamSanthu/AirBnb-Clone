@@ -1,9 +1,6 @@
 <script setup></script>
 <template>
-  <div><h1>Travel Bingo-Your Dream Destination at your finger tips</h1></div>
-  <hr />
-  <div>
-    <h3>
+  <section class="page"><article class="surface stack-lg"><header class="stack"><p class="muted">About Travel Bingo</p><h1>Your dream destination at your fingertips</h1></header><p>
       Travel Bingo is a web application created for discovering new destinations
       and stays. It allows users to browse different listings and view their
       details in one place. Users can also create accounts and add their own
@@ -15,7 +12,5 @@
       with a backend and database to manage the application. We focused on
       keeping the application simple while including useful features. Travel
       Bingo is built for anyone looking to discover their next destination.
-    </h3>
-  </div>
-  <router-link to="/">Home</router-link>
+    </p><router-link class="button" to="/">Home</router-link></article></section>
 </template>

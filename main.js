@@ -1,6 +1,7 @@
 import { createApp } from "vue";
 import Router from "./router.js";
 import Route from "./route.vue";
+import "./assets/styles/main.css";
 
 // create
 const app = createApp(Route);

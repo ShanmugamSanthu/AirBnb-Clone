@@ -27,11 +27,11 @@ watch(
 );
 </script>
 <template>
-  <h4 v-if="userNameInfo">Hi {{ userNameInfo }}</h4>
-  <div><h1>Travel Bingo-Your Dream Destination at your finger tips</h1></div>
-
-  <h3>
-    <div class="navbar">
+  <header class="site-header">
+    <div class="site-header__inner">
+      <router-link class="brand" to="/">Travel Bingo</router-link>
+      <span v-if="userNameInfo" class="user-greeting">Hi {{ userNameInfo }}</span>
+      <nav class="nav" aria-label="Main navigation">
       <router-link to="/" v-if="userNameInfo">Home</router-link>
       <router-link to="/aboutpage">About us</router-link>
       <router-link to="/mybookings">My Bookings</router-link>
@@ -41,7 +41,8 @@ watch(
           <button>Logout</button>
         </form>
       </div>
+      </nav>
     </div>
-  </h3>
-  <slot />
+  </header>
+  <main><slot /></main>
 </template>
