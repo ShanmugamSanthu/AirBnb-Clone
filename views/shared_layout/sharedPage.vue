@@ -30,17 +30,19 @@ watch(
   <header class="site-header">
     <div class="site-header__inner">
       <router-link class="brand" to="/">Travel Bingo</router-link>
-      <span v-if="userNameInfo" class="user-greeting">Hi {{ userNameInfo }}</span>
+      <span v-if="userNameInfo" class="user-greeting"
+        >Hi {{ userNameInfo }}</span
+      >
       <nav class="nav" aria-label="Main navigation">
-      <router-link to="/" v-if="userNameInfo">Home</router-link>
-      <router-link to="/aboutpage">About us</router-link>
-      <router-link to="/mybookings">My Bookings</router-link>
-      <router-link to="/managebookings">Manage Bookings</router-link>
-      <div v-if="userNameInfo">
-        <form action="/vue/user/logout" method="post">
-          <button>Logout</button>
-        </form>
-      </div>
+        <router-link to="/" v-if="userNameInfo">Home</router-link>
+        <router-link to="/aboutpage">About us</router-link>
+        <router-link to="/mybookings">My Bookings</router-link>
+        <router-link to="/managebookings">Manage Bookings</router-link>
+        <div v-if="userNameInfo">
+          <form action="/vue/user/logout" method="post">
+            <button>Logout</button>
+          </form>
+        </div>
       </nav>
     </div>
   </header>
