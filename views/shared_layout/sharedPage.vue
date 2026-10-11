@@ -12,7 +12,7 @@ const handleLogout = async () => {
 
     if (response.ok) {
       userNameInfo.value = null;
-      router.push("/loginpage");
+      await router.push("/loginpage");
     } else {
       console.error("Logout failed:", response.status);
     }
@@ -20,7 +20,6 @@ const handleLogout = async () => {
     console.error("Logout error:", error);
   }
 };
-
 const router = useRouter();
 const route = useRoute();
 const userNameInfo = ref(null);
