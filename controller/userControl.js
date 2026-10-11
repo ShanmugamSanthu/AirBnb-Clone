@@ -57,7 +57,7 @@ export const logout = (req, res, next) => {
         const newErr = new ExpressError("", 500);
         return next(newErr);
       }
-      res.redirect("/user/loginpage");
+      res.status(200).json({ message: "Logged out successfully" });
     });
   });
 };
