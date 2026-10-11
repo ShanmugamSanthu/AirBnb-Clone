@@ -4,6 +4,10 @@ import { useRouter, useRoute } from "vue-router";
 import { authNCheck, userAuthInfo } from "../../utils/authCheck";
 import { apiFetch } from "../../api.js";
 
+const router = useRouter();
+const route = useRoute();
+const userNameInfo = ref(null);
+
 const handleLogout = async () => {
   try {
     const response = await apiFetch("/vue/user/logout", {
@@ -20,9 +24,6 @@ const handleLogout = async () => {
     console.error("Logout error:", error);
   }
 };
-const router = useRouter();
-const route = useRoute();
-const userNameInfo = ref(null);
 
 const namedInfofn = async () => {
   const response = await authNCheck("/vue/user/current-user", router);
