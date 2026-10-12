@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import listingReview from "../config_DB/models/listingReviewSchema.js";
 import cloudinary from "../config_DB/cloudinary.js";
 import { unlink } from "node:fs/promises";
+import booking from "../config_DB/models/bookingSchema.js";
 
 // render listing form
 export const listingForm = (req, res) => {
@@ -136,6 +137,7 @@ export const deleteListing = async (req, res, next) => {
     }
 
     await listingReview.deleteMany({ listingID: listingId });
+    await booking.deleteMany({ listingID: listingId })
     await list.findByIdAndDelete(listingId);
 
     res.status(200).json("Listing deleted successfully");
