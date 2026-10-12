@@ -5,6 +5,9 @@ import { useRoute, useRouter } from "vue-router";
 import { reviewCheck } from "../ClientSchema/uxValidation.js";
 import { apiFetch } from "../api.js";
 
+console.log("StarRatingModule:", StarRatingModule);
+console.log("StarRatingModule.default:", StarRatingModule.default);
+
 const urlID = useRoute();
 const StarRating = StarRatingModule.default;
 const rating = ref(0);
