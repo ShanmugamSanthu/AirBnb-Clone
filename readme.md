@@ -1,6 +1,6 @@
 Travel Bingo — Airbnb-Style Listing Application
 
-Live Demo: https://travel-bingo-2b3l.onrender.com
+**Live Demo:** [Open Travel Bingo] https://travel-bingo-2b3l.onrender.com
 
 A full-stack Airbnb-style listing and booking application built with Node.js, Express, MongoDB, Vue.js, and Cloudinary.
 
@@ -10,87 +10,108 @@ The application has been manually end-to-end tested across its major user flows.
 
 Features
 
-Authentication & Sessions
+Authentication & Sessions# Travel Bingo — Full-Stack Listing & Booking Application
 
-- User signup, login, and logout
-- Username and password authentication using Passport.js
-- Session-based authentication with Express Session
-- MongoDB-backed session storage using Connect-Mongo
-- Email verification during login
-- Email uniqueness validation during signup
-- Client-side UX validation and server-side user validation
+Travel Bingo is a full-stack Airbnb-style application where users can discover places to stay, create and manage property listings, write reviews, and make date-based bookings.
 
-Listings
+Built with **Vue 3, Vite, Node.js, Express, MongoDB, and Mongoose**, the application includes session-based authentication, resource-level authorization, image uploads, review management, and booking availability validation.
 
-- Create, view, edit, and delete listings
-- Upload listing images through Cloudinary
-- Replace images when updating a listing
-- Listing ownership authorization
-- Protected listing routes
+## Features
 
-Reviews
+### Authentication & Authorization
 
-- Create, display, and delete reviews
-- Review ownership authorization
-- Automatically remove associated reviews when a listing is deleted
+- User registration, login, and logout.
+- Passport Local authentication with session persistence.
+- MongoDB-backed session storage in the deployed configuration.
+- Email verification during login and email uniqueness validation during registration.
+- Protected routes and resource-level authorization.
 
-Booking Management
+### Listing Management
 
-- Date-based check-in and check-out
-- Guest count support
-- Automatic price calculation based on listing price and booking duration
-- Availability checks and date-overlap detection
-- Booking creation, viewing, and cancellation
-- Seven-day cancellation policy
-- Cancelled bookings remain stored with a `CANCELLED` status
-- Cancelled bookings no longer block listing availability
-- Active booking queries return only `CONFIRMED` bookings
-- Booking authorization to prevent unauthorized access to other users' bookings
+- Create, view, edit, and delete property listings.
+- Navigate to listing details by clicking the listing image or title.
+- Upload and replace listing images using Cloudinary.
+- Restrict listing modifications to the listing owner.
+- Automatically remove associated reviews and bookings when a listing is deleted.
 
-Validation & Error Handling
+### Reviews & Ratings
 
-- Client-side UX validation
-- Server-side request validation using Joi
-- Authentication middleware for protected routes
-- Listing, review, and booking authorization
-- Centralized Express error handling
+- Add reviews with star ratings.
+- Display reviews associated with individual listings.
+- Restrict review deletion to authorized users.
+- Automatically remove reviews when their associated listing is deleted.
 
-Image Management
+### Booking Management
 
-- Multer handles incoming image uploads
-- Cloudinary stores listing images
-- MongoDB stores each image's secure URL and public ID
-- Old Cloudinary images are cleaned up when replaced or when their listing is deleted
+- Create bookings with check-in and check-out dates.
+- Specify guest counts and calculate prices based on listing price and booking duration.
+- Validate booking availability and detect overlapping date ranges.
+- Cancel bookings subject to the application's cancellation policy.
+- Preserve normally cancelled bookings with a `CANCELLED` status.
+- Exclude cancelled bookings from availability checks.
+- Restrict access to bookings according to authorization rules.
+- Delete associated bookings when a listing is permanently deleted.
 
-Tech Stack
+### Validation & Error Handling
 
-| Area                | Technologies                         |
-| ------------------- | ------------------------------------ |
-| Backend             | Node.js, Express.js                  |
-| Database            | MongoDB, Mongoose                    |
-| Authentication      | Passport.js, Passport Local Mongoose |
-| Sessions            | Express Session, Connect-Mongo       |
-| Validation          | Joi                                  |
-| Image uploads       | Multer, Cloudinary                   |
-| Frontend            | Vue.js, Vue Router                   |
-| Build tool          | Vite                                 |
-| Languages & styling | JavaScript, HTML, CSS                |
+- Client-side validation for a better user experience.
+- Server-side request validation using Joi.
+- Authentication and authorization middleware.
+- Centralized Express error handling.
 
-Architecture
+### Image Management
 
-The application uses a Vue.js frontend with Vue Router for client-side navigation and an Express backend for server-side operations.
+- Handle multipart uploads with Multer.
+- Store listing images in Cloudinary.
+- Save image URLs and public IDs in MongoDB.
+- Clean up replaced or deleted listing images in Cloudinary.
 
-- Frontend: Renders the user interface and handles client-side navigation.
-- Backend: Handles authentication, sessions, API requests, validation, authorization, listings, reviews, and bookings.
-- Database: MongoDB stores users, listings, reviews, bookings, and session data.
-- Image storage: Cloudinary stores listing images, while MongoDB stores image metadata.
+## Tech Stack
 
-The frontend communicates with the backend using asynchronous `fetch()` requests.
+| Area           | Technologies                         |
+| -------------- | ------------------------------------ |
+| Frontend       | Vue 3, Vue Router                    |
+| Build Tool     | Vite                                 |
+| Backend        | Node.js, Express.js                  |
+| Database       | MongoDB, Mongoose                    |
+| Authentication | Passport.js, Passport Local Mongoose |
+| Sessions       | Express Session, Connect-Mongo       |
+| Validation     | Joi                                  |
+| Image Uploads  | Multer, Cloudinary                   |
+| Requests       | Fetch API                            |
+| Languages      | JavaScript, HTML, CSS                |
 
-Testing
+## Application Architecture
 
-The application has been manually end-to-end tested across its major user flows, including authentication, listing management, reviews, booking availability, and cancellation handling.
+The application separates frontend rendering from backend operations.
 
-Author
+- **Frontend:** Vue components render the interface, Vue Router handles client-side navigation, and Fetch API requests communicate with the backend.
+- **Backend:** Express handles authentication, session management, CRUD operations, validation, authorization, reviews, and bookings.
+- **Database:** MongoDB stores users, listings, reviews, bookings, and session data.
+- **Image Storage:** Cloudinary stores listing images while MongoDB stores their associated metadata.
 
-Shanmugam
+## Deployment
+
+The application is deployed on Render, with the frontend and backend configured for production.
+
+Production configuration includes the frontend API URL, backend CORS origin, session cookies, database connection, and Cloudinary credentials.
+
+Set environment variables through the deployment platform's configuration rather than committing secrets to the repository.
+
+## Testing
+
+The application's major user flows have been manually tested in development and production, including:
+
+- Registration, login, logout, and session persistence.
+- Listing creation, editing, viewing, and deletion.
+- Review creation and star-rating interaction.
+- Booking creation, date-overlap validation, and cancellation.
+- Authorization checks and related-record cleanup when listings are deleted.
+
+Automated tests are not currently configured.
+
+## Author
+
+**Shanmugam**
+
+_Travel Bingo is a personal full-stack development project built to practice and demonstrate frontend development, backend APIs, authentication, database relationships, validation, and production deployment._
