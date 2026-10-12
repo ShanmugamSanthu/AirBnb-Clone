@@ -137,7 +137,7 @@ export const deleteListing = async (req, res, next) => {
     }
 
     await listingReview.deleteMany({ listingID: listingId });
-    await booking.deleteMany({ listingID: listingId })
+    await booking.deleteMany({ listingID: listingId });
     await list.findByIdAndDelete(listingId);
 
     res.status(200).json("Listing deleted successfully");
