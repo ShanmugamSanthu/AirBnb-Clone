@@ -31,11 +31,17 @@ onMounted(async () => {
         :key="item._id"
         class="surface listing-card"
       >
-        <img class="listing-card__image" :src="item.Image" :alt="item.Title" />
+        <img
+          class="listing-card__image"
+          :src="item.Image"
+          :alt="item.Title"
+          id="nav"
+        />
         <div class="listing-card__body">
           <RouterLink
             class="listing-card__title"
             :to="`/listing/${item._id}`"
+            id="nav"
             >{{ item.Title }}</RouterLink
           >
           <p class="muted">{{ item.Description }}</p>
