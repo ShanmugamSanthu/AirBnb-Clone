@@ -1,5 +1,7 @@
 Travel Bingo — Airbnb-Style Listing Application
 
+Live Demo: https://travel-bingo-2b3l.onrender.com
+
 A full-stack Airbnb-style listing and booking application built with Node.js, Express, MongoDB, Vue.js, and Cloudinary.
 
 Travel Bingo allows users to create and manage property listings, upload images, leave reviews, and make date-based bookings. The application includes session-based authentication, resource-level authorization, booking availability checks, cancellation handling, and a responsive Vue.js frontend.
