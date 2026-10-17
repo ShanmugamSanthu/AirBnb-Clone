@@ -34,9 +34,18 @@ const namedInfofn = async () => {
   userNameInfo.value = data.userName;
 };
 onMounted(() => {
+  if (!sessionStorage.getItem("freeTierNoticeShown")) {
+    alert(`Travel Bingo — Loading Information
+
+This website runs on a free-tier hosting service. After a period of inactivity, the server may take up to 30 seconds to start.
+
+Please wait a little while if the website doesn't load immediately. Thank you for your patience!`);
+
+    sessionStorage.setItem("freeTierNoticeShown", "true");
+  }
+
   namedInfofn();
 });
-
 watch(
   () => route.path,
   () => {
