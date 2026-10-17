@@ -4,6 +4,7 @@ import { calculateDays } from "../utils/calculateDays.js"; // for booking check
 import { parseCalendarDate } from "../utils/parseCalendarDate.js";
 import { daysUntilDate } from "../utils/daysUntilDate.js"; // for cancellation
 import ExpressError from "../error.js";
+import statusCheck from "../utils/boookingStatusUpdate.js";
 
 // check booking availabilty
 export const checkBooking = async (req, res, next) => {
@@ -230,8 +231,8 @@ export const cancelBooking = async (req, res, next) => {
 export const myBookings = async (req, res, next) => {
   const customerID = req.user?._id;
   try {
-    const result = await booking.find({ customerID: customerID });
-
+    let result = await booking.find({ customerID: customerID });
+    result = await statusCheck(result)
     res.status(200).json(result);
     return;
   } catch (error) {
@@ -245,7 +246,8 @@ export const myBookings = async (req, res, next) => {
 export const manageBookings = async (req, res, next) => {
   const ownerID = req.user?._id;
   try {
-    const result = await booking.find({ ownerID: ownerID });
+    let result = await booking.find({ ownerID: ownerID });
+    result = await statusCheck(result)
     res.status(200).json(result);
     return;
   } catch (error) {

@@ -14,8 +14,8 @@ import {
 
 const router = express.Router();
 
-router.get("/mybookings", authenticationCheck, myBookings); // temp name
-router.get("/managebookings", authenticationCheck, manageBookings); // temp name
+router.get("/mybookings", authenticationCheck, myBookings);
+router.get("/managebookings", authenticationCheck, manageBookings);
 
 router.get("/:id", authenticationCheck, bookingGetValidation, checkBooking);
 router.post("/:id", authenticationCheck, bookingPostValidation, addBooking);
