@@ -202,7 +202,7 @@ export const cancelBooking = async (req, res, next) => {
 
     if (result < 7) {
       sendInfo.status =
-        "Cancellation not allowed read the privacy policy accordingly";
+        "Cancellation not allowed read the cancellation policy accordingly";
       res.status(400).json(sendInfo);
       return;
     }
