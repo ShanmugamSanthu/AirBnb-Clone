@@ -42,8 +42,9 @@ export const checkBooking = async (req, res, next) => {
     }
     const existingBookings = await booking.find({
       listingID: urlID,
-      bookingStatus: "CONFIRMED",
+      bookingStatus: { $in: ["CONFIRMED", "ONGOING"] },
     });
+
     let isAvailable = true;
     for (const existingBooking of existingBookings) {
       if (
@@ -122,7 +123,7 @@ export const addBooking = async (req, res, next) => {
 
     const existingBookings = await booking.find({
       listingID: urlID,
-      bookingStatus: "CONFIRMED",
+      bookingStatus: { $in: ["CONFIRMED", "ONGOING"] },
     });
 
     let isAvailable = true;
