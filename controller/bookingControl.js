@@ -5,6 +5,7 @@ import { parseCalendarDate } from "../utils/parseCalendarDate.js";
 import { daysUntilDate } from "../utils/daysUntilDate.js"; // for cancellation
 import ExpressError from "../error.js";
 import statusCheck from "../utils/boookingStatusUpdate.js";
+import mongoose from "mongoose";
 
 // check booking availabilty
 export const checkBooking = async (req, res, next) => {
@@ -91,93 +92,158 @@ export const addBooking = async (req, res, next) => {
   const checkOutDate = parseCalendarDate(bookingDetails.checkOutDate);
 
   const today = new Date();
-
   const todayUTC = new Date(
-    Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()),
+    Date.UTC(
+      today.getUTCFullYear(),
+      today.getUTCMonth(),
+      today.getUTCDate()
+    )
   );
 
   if (checkInDate < todayUTC) {
-    sendInfo.status = "Check-in date cannot be before today";
-    return res.status(400).json(sendInfo);
+    return res.status(400).json({
+      status: "Check-in date cannot be before today",
+    });
   }
 
-  if (checkOutDate < checkInDate) {
-    sendInfo.status = "Check-out date must be on or after check-in date";
-    return res.status(400).json(sendInfo);
+  if (checkOutDate <= checkInDate) {
+    return res.status(400).json({
+      status: "Check-out date must be after check-in date",
+    });
+  }
+
+  const numberOfGuests = Number(bookingDetails.numberOfGuests);
+
+  if (!Number.isInteger(numberOfGuests) || numberOfGuests < 1) {
+    return res.status(400).json({
+      status: "Please enter a valid number of guests",
+    });
   }
 
   const days = calculateDays(checkOutDate, checkInDate);
   const urlID = req.params.id;
 
+  let session;
+
   try {
-    const result = await list.findOne({ _id: urlID }).populate("publisher");
+    session = await mongoose.startSession();
 
-    if (!result) {
-      sendInfo.status = "Listing doesnt exist";
-      return res.status(400).send(sendInfo);
-    }
-    if (Number(bookingDetails.numberOfGuests) > result.maxGuests) {
-      sendInfo.status = `Number of guests cannot exceed ${result.maxGuests}`;
-      return res.status(400).json(sendInfo);
-    }
+    let transactionResult;
 
-    const existingBookings = await booking.find({
-      listingID: urlID,
-      bookingStatus: { $in: ["CONFIRMED", "ONGOING"] },
-    });
+    await session.withTransaction(
+      async () => {
 
-    let isAvailable = true;
-    for (const existingBooking of existingBookings) {
-      if (
-        (checkInDate >= existingBooking.checkInDate &&
-          checkInDate <= existingBooking.checkOutDate) ||
-        (checkOutDate >= existingBooking.checkInDate &&
-          checkOutDate <= existingBooking.checkOutDate)
-      ) {
-        isAvailable = false;
-        break;
-      } else if (
-        (existingBooking.checkInDate >= checkInDate &&
-          existingBooking.checkInDate <= checkOutDate) ||
-        (existingBooking.checkOutDate >= checkInDate &&
-          existingBooking.checkOutDate <= checkOutDate)
-      ) {
-        isAvailable = false;
-        break;
+        transactionResult = null;
+
+        const lockResult = await list.updateOne(
+          { _id: urlID },
+          { $inc: { bookingLockVersion: 1 } },
+          { session }
+        );
+
+        if (lockResult.matchedCount === 0) {
+          transactionResult = { type: "missing-listing" };
+          return;
+        }
+
+
+        const result = await list
+          .findById(urlID)
+          .populate("publisher")
+          .session(session);
+
+        if (!result) {
+          transactionResult = { type: "missing-listing" };
+          return;
+        }
+
+        if (numberOfGuests > result.maxGuests) {
+          transactionResult = {
+            type: "invalid-guests",
+            maxGuests: result.maxGuests,
+          };
+          return;
+        }
+
+
+        const existingBooking = await booking.findOne({
+          listingID: urlID,
+          bookingStatus: { $in: ["CONFIRMED", "ONGOING"] },
+          checkInDate: { $lt: checkOutDate },
+          checkOutDate: { $gt: checkInDate },
+        }).session(session);
+
+        if (existingBooking) {
+          transactionResult = { type: "unavailable" };
+          return;
+        }
+
+        const bookingObj = {
+          ownerName: result.publisher.username,
+          ownerID: String(result.publisher._id),
+          customerName: req.user?.username,
+          customerID: String(req.user?._id),
+          listingID: urlID,
+          checkInDate,
+          checkOutDate,
+          price: result.Price * days,
+          numberOfGuests,
+          bookingStatus: "CONFIRMED",
+        };
+
+        await booking.create([bookingObj], { session });
+
+        transactionResult = { type: "success" };
+      },
+      {
+        readPreference: "primary",
+        readConcern: { level: "snapshot" },
+        writeConcern: { w: "majority" },
       }
+    );
+
+    if (transactionResult?.type === "missing-listing") {
+      return res.status(404).json({
+        status: "Listing doesnt exist",
+      });
     }
 
-    if (isAvailable) {
-      const bookingObj = {};
-      bookingObj.ownerName = `${result.publisher.username}`;
-      bookingObj.ownerID = `${result.publisher._id}`;
-      bookingObj.customerName = req.user?.username;
-      bookingObj.customerID = req.user?._id;
-      bookingObj.listingID = urlID;
-      bookingObj.checkInDate = checkInDate;
-      bookingObj.checkOutDate = checkOutDate;
-      bookingObj.price = result.Price * days;
-      bookingObj.numberOfGuests = bookingDetails.numberOfGuests;
-      bookingObj.bookingStatus = "CONFIRMED";
-
-      const bookingSaved = await booking.create(bookingObj);
-      if (!bookingSaved) {
-        sendInfo.status = "Something is wrong try again later";
-        res.status(500).json(sendInfo);
-        return;
-      }
-      sendInfo.status = "Booking successful";
-      res.status(200).json(sendInfo);
-      return;
-    } else {
-      sendInfo.status = "Booking not available";
-      res.status(200).json(sendInfo);
-      return;
+    if (transactionResult?.type === "invalid-guests") {
+      return res.status(400).json({
+        status: `Number of guests cannot exceed ${transactionResult.maxGuests}`,
+      });
     }
+
+    if (transactionResult?.type === "unavailable") {
+      return res.status(409).json({
+        status: "Booking not available",
+      });
+    }
+
+    if (transactionResult?.type === "success") {
+      return res.status(200).json({
+        status: "Booking successful",
+      });
+    }
+
+    throw new Error("Booking transaction completed without a result");
   } catch (error) {
-    console.log(error);
-    const newErr = new ExpressError("", 500);
+    console.error("Booking transaction failed:", error);
+
+    if (res.headersSent) {
+      return next(error);
+    }
+
+    const newErr = new ExpressError(
+      "Unable to complete booking. Please try again.",
+      500
+    );
+
     next(newErr);
+  } finally {
+    if (session) {
+      await session.endSession();
+    }
   }
 };
 
@@ -257,3 +323,19 @@ export const manageBookings = async (req, res, next) => {
     next(newErr);
   }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

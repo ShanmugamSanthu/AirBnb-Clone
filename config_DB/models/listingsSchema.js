@@ -54,6 +54,10 @@ const listingsSchema = new defineSchema({
     required: true,
     min: 1,
   },
+  bookingLockVersion: {
+    type: Number,
+    default: 0
+  }
 });
 
 const list = mongoose.model("listing", listingsSchema);
