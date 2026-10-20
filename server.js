@@ -35,8 +35,8 @@ const sessionOptions = {
 
   cookie: {
     httpOnly: true,
-    sameSite: "none",
-    secure: true,
+    sameSite: "lax",
+    secure: false,
   },
 
 };
