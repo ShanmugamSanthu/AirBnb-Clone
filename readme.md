@@ -113,5 +113,3 @@ Automated tests are not currently configured.
 ## Author
 
 **Shanmugam**
-
-Travel Bingo is a personal full-stack development project built to practice and demonstrate frontend development, backend APIs, authentication, database relationships, validation, and production deployment
